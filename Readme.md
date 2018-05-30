@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Дарья Долгих](https://up.htmlacademy.ru/javascript/14/user/186126).
-* Наставник: `Неизвестно`.
+* Наставник: [Наталья Ёркина](https://up.htmlacademy.ru/javascript/14/user/50014).
 
 ---
 
