@@ -14,15 +14,15 @@ var photosChoices = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 
-function getUniqueChoice(arr) {
-  var index = Math.round(Math.random() * arr.length);
-  var value = arr[index];
-  arr.splice(index, 1);
+function getUniqueChoice(currentArray) {
+  var index = Math.round(Math.random() * currentArray.length);
+  var value = currentArray[index];
+  currentArray.splice(index, 1);
   return value;
 }
 
-function getRandomChoice(arr) {
-  return arr[Math.round(Math.random() * arr.length)];
+function getRandomChoice(currentArray) {
+  return currentArray[Math.round(Math.random() * currentArray.length)];
 }
 
 function getRandomInt(min, max) {
@@ -34,7 +34,7 @@ function compareRandom() {
 }
 
 for (var i = 1; i <= 8; i++) {
-  var ad = {
+  var advert = {
     'author': {
       'avatar': 'img/avatars/user0' + i + '.png'
     },
@@ -57,9 +57,23 @@ for (var i = 1; i <= 8; i++) {
       'y': getRandomInt(130, 630)
     }
   };
-  ad.offer.address = ad.location.x + ', ' + ad.location.y;
-  nearestAds.push(ad);
+  advert.offer.address = advert.location.x + ', ' + advert.location.y;
+  nearestAds.push(advert);
 }
 
-console.log(nearestAds);
-document.querySelector('.map').classList.remove('mar--faded');
+var map = document.querySelector('.map');
+map.classList.remove('mar--faded');
+
+var fragment = document.createDocumentFragment();
+
+nearestAds.forEach(function () {
+  var pinHTML = document.createElement('button');
+  pinHTML.className = 'map__pin';
+  pinHTML.style.left = advert.location.x - 20;
+  pinHTML.style.top = advert.location.y - 40;
+  pinHTML.src = 'advert.author.avatar';
+  pinHTML.alt = 'advert.offer.title';
+
+  fragment.appendChild(pinHTML);
+});
+map.appendChild(fragment);
