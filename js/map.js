@@ -1,6 +1,8 @@
 'use strict';
 
 var mapTemplate = document.querySelector('template').content;
+var map = document.querySelector('.map');
+var mapFiltersContainer = document.querySelector('.map__filters-container');
 var nearestAdverts = [];
 
 var titleChoices = ['Большая уютная квартира', 'Маленькая неуютная квартира',
@@ -20,23 +22,23 @@ var translateType = {
   'house': 'Дом',
   'bungalo': 'Бунгало'
 };
-var translateFeatures = {
-  'wifi': 'WiFi',
-  'dishwasher': 'Посудомойка',
-  'parking': 'Парковка',
-  'washer': 'Стиральная машина',
-  'elevator': 'Лифт',
-  'conditioner': 'Кондиционер'
-};
+// var translateFeatures = {
+//   'wifi': 'WiFi',
+//   'dishwasher': 'Посудомойка',
+//   'parking': 'Парковка',
+//   'washer': 'Стиральная машина',
+//   'elevator': 'Лифт',
+//   'conditioner': 'Кондиционер'
+// };
 function getUniqueChoice(currentArray) {
-  var index = Math.round(Math.random() * currentArray.length);
+  var index = Math.floor(Math.random() * currentArray.length);
   var value = currentArray[index];
   currentArray.splice(index, 1);
   return value;
 }
 
 function getRandomChoice(currentArray) {
-  return currentArray[Math.round(Math.random() * currentArray.length)];
+  return currentArray[Math.floor(Math.random() * currentArray.length)];
 }
 
 function getRandomInt(min, max) {
@@ -60,8 +62,8 @@ for (var i = 1; i <= 8; i++) {
       'guests': getRandomInt(1, 10),
       'checkin': getRandomChoice(timeChoices),
       'checkout': getRandomChoice(timeChoices),
-      'features': translateFeatures[featuresChoices.sort(compareRandom).slice(
-          getRandomInt(0, featuresChoices.length))],
+      'features': featuresChoices.sort(compareRandom).slice(
+          getRandomInt(0, featuresChoices.length)),
       'description': '',
       'photos': photosChoices.sort(compareRandom)
     },
@@ -74,44 +76,43 @@ for (var i = 1; i <= 8; i++) {
   nearestAdverts.push(advert);
 }
 
-var map = document.querySelector('.map');
 map.classList.remove('map--faded');
 
 var fragment = document.createDocumentFragment();
-nearestAdverts.forEach(function () {
-  var pinHTML = document.createElement('button');
-  pinHTML.className = 'map__pin';
-  pinHTML.style.left = (advert.location.x - 20) + 'px';
-  pinHTML.style.top = (advert.location.y - 40) + 'px';
-  pinHTML.src = 'advert.author.avatar';
-  pinHTML.alt = 'advert.offer.title';
 
-  fragment.appendChild(pinHTML);
+nearestAdverts.forEach(function (value) {
+  var buttonPin = document.createElement('button');
+  buttonPin.className = 'map__pin';
+  buttonPin.style.left = (value.location.x - 20) + 'px';
+  buttonPin.style.top = (value.location.y - 40) + 'px';
+  buttonPin.backgroundImage = value.author.avatar;
+  fragment.appendChild(buttonPin);
 });
+
 document.querySelector('.map__pins').appendChild(fragment);
 
-var getMapElement = function () {
+var getMapElement = function (element) {
   var clonedElement = mapTemplate.cloneNode(true);
   clonedElement.querySelector('.popup__title').textContent
-    = advert.offer.title;
+    = element.offer.title;
   clonedElement.querySelector('.popup__text--address').textContent
-    = advert.offer.address;
+    = element.offer.address;
   clonedElement.querySelector('.popup__text--price').textContent =
-    advert.offer.price + ' ₽/ночь';
-  clonedElement.querySelector('.popup__type').textContent = advert.offer.type;
+    element.offer.price + ' ₽/ночь';
+  clonedElement.querySelector('.popup__type').textContent = element.offer.type;
   clonedElement.querySelector('.popup__text--capacity').textContent
-    = advert.offer.rooms + ' комнаты для ' + advert.offer.guests + ' гостей';
+    = element.offer.rooms + ' комнаты для ' + advert.offer.guests + ' гостей';
   clonedElement.querySelector('.popup__text--time').textContent
-    = 'Заезд после ' + advert.offer.checkin + ', выезд до ' + advert.offer.checkout;
+    = 'Заезд после ' + advert.offer.checkin + ', выезд до ' + element.offer.checkout;
   clonedElement.querySelector('.popup__features').textContent
-    = advert.offer.features;
+    = element.offer.features;
   clonedElement.querySelector('.popup__description').textContent
-    = advert.offer.description;
-  clonedElement.querySelector('.popup__photos').textContent = '' ;
-  clonedElement.querySelector('.popup__avatar').textContent = advert.author.avatar;
+    = element.offer.description;
+  clonedElement.querySelector('.popup__photos').textContent = '';
+  clonedElement.querySelector('.popup__avatar').src = element.author.avatar;
   return clonedElement;
 };
-nearestAdverts.forEach(function (value) {
-  map.appendChild(getMapElement(value));
+
+nearestAdverts.forEach(function (element) {
+  map.insertBefore(getMapElement(element), mapFiltersContainer);
 });
-console.log(getMapElement());
