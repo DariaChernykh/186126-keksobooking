@@ -83,7 +83,8 @@ var getMapElement = function (element) {
   clonedElement.querySelector('.popup__text--capacity').textContent
     = element.offer.rooms + ' комнаты для ' + advert.offer.guests + ' гостей';
   clonedElement.querySelector('.popup__text--time').textContent
-    = 'Заезд после ' + advert.offer.checkin + ', выезд до ' + element.offer.checkout;
+    = 'Заезд после ' + advert.offer.checkin + ', выезд до '
+    + element.offer.checkout;
   clonedElement.querySelector('.popup__features').textContent
     = element.offer.features;
   clonedElement.querySelector('.popup__description').textContent
@@ -91,9 +92,12 @@ var getMapElement = function (element) {
   clonedElement.querySelector('.popup__photos').textContent = '';
   clonedElement.querySelector('.popup__avatar').src = element.author.avatar;
 
-  clonedElement.querySelector('.map__pin').firstElementChild.src = element.author.avatar;
-  clonedElement.querySelector('.map__pin').style.left = (element.location.x - 20) + 'px';
-  clonedElement.querySelector('.map__pin').style.top = (element.location.y - 40) + 'px';
+  clonedElement.querySelector('.map__pin').firstElementChild.src
+    = element.author.avatar;
+  clonedElement.querySelector('.map__pin').style.left
+    = (element.location.x - 20) + 'px';
+  clonedElement.querySelector('.map__pin').style.top
+    = (element.location.y - 40) + 'px';
   return clonedElement;
 };
 
