@@ -22,14 +22,7 @@ var translateType = {
   'house': 'Дом',
   'bungalo': 'Бунгало'
 };
-// var translateFeatures = {
-//   'wifi': 'WiFi',
-//   'dishwasher': 'Посудомойка',
-//   'parking': 'Парковка',
-//   'washer': 'Стиральная машина',
-//   'elevator': 'Лифт',
-//   'conditioner': 'Кондиционер'
-// };
+
 function getUniqueChoice(currentArray) {
   var index = Math.floor(Math.random() * currentArray.length);
   var value = currentArray[index];
@@ -78,19 +71,6 @@ for (var i = 1; i <= 8; i++) {
 
 map.classList.remove('map--faded');
 
-var fragment = document.createDocumentFragment();
-
-nearestAdverts.forEach(function (value) {
-  var buttonPin = document.createElement('button');
-  buttonPin.className = 'map__pin';
-  buttonPin.style.left = (value.location.x - 20) + 'px';
-  buttonPin.style.top = (value.location.y - 40) + 'px';
-  buttonPin.backgroundImage = value.author.avatar;
-  fragment.appendChild(buttonPin);
-});
-
-document.querySelector('.map__pins').appendChild(fragment);
-
 var getMapElement = function (element) {
   var clonedElement = mapTemplate.cloneNode(true);
   clonedElement.querySelector('.popup__title').textContent
@@ -110,6 +90,10 @@ var getMapElement = function (element) {
     = element.offer.description;
   clonedElement.querySelector('.popup__photos').textContent = '';
   clonedElement.querySelector('.popup__avatar').src = element.author.avatar;
+
+  clonedElement.querySelector('.map__pin').firstElementChild.src = element.author.avatar;
+  clonedElement.querySelector('.map__pin').style.left = (element.location.x - 20) + 'px';
+  clonedElement.querySelector('.map__pin').style.top = (element.location.y - 40) + 'px';
   return clonedElement;
 };
 
