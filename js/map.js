@@ -93,10 +93,13 @@ var getMapElement = function (element) {
     = element.offer.features;
   clonedElement.querySelector('.popup__description').textContent
     = element.offer.description;
+  clonedElement.querySelector('.popup__photo').src = element.offer.photos[0];
 
-  for (i = 0; i < element.offer.photos.length; i++) {
+  for (i = 1; i < element.offer.photos.length; i++) {
     var image = new Image(45, 40);
     image.src = element.offer.photos[i];
+    image.classList.add('popup__photo');
+    image.setAttribute('alt', 'Фотография жилья');
     clonedElement.querySelector('.popup__photos').appendChild(image);
   }
 
