@@ -94,13 +94,12 @@ var getMapElement = function (element) {
   clonedElement.querySelector('.popup__description').textContent
     = element.offer.description;
 
-  element.offer.photos.forEach(function (value) {
-    var img = clonedElement.querySelector('.popup__photo').cloneNode(true);
-    img.src = value;
-    clonedElement.querySelector('.popup__photos').append(img);
-  });
+  for (i = 0; i < element.offer.photos.length; i++) {
+    var image = new Image(45, 40);
+    image.src = element.offer.photos[i];
+    clonedElement.querySelector('.popup__photos').appendChild(image);
+  }
 
-  clonedElement.querySelector('.popup__photo').remove();
   clonedElement.querySelector('.popup__avatar').src = element.author.avatar;
   clonedElement.querySelector('.map__pin img').src = element.author.avatar;
   clonedElement.querySelector('.map__pin').style.left
