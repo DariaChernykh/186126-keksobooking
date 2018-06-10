@@ -1,29 +1,31 @@
 'use strict';
 
-var mapTemplate = document.querySelector('template').content;
+var cardTemplate = document.querySelector('template').content;
 var map = document.querySelector('.map');
 var mapFiltersContainer = document.querySelector('.map__filters-container');
 var nearestAdverts = [];
 
-var titleChoices = ['Большая уютная квартира', 'Маленькая неуютная квартира',
+var TITLES = ['Большая уютная квартира', 'Маленькая неуютная квартира',
   'Огромный прекрасный дворец', 'Маленький ужасный дворец',
   'Красивый гостевой домик', 'Некрасивый негостеприимный домик',
   'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
-var typeChoices = ['palace', 'flat', 'house', 'bungalo'];
-var timeChoices = ['12:00', '13:00', '14:00'];
-var featuresChoices = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator',
+var TYPES = ['palace', 'flat', 'house', 'bungalo'];
+var TIMES = ['12:00', '13:00', '14:00'];
+var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator',
   'conditioner'];
-var photosChoices = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg',
+var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
-var translateType = {
+var TRANSLATE_TYPE = {
   'palace': 'Дворец',
   'flat': 'Квартира',
   'house': 'Дом',
   'bungalo': 'Бунгало'
 };
+var pinHalfWidth = 20;
+var pinHeight = 40;
 
-function getUniqueChoice(currentArray) {
+function getUniqueItem(currentArray) {
   var index = Math.floor(Math.random() * currentArray.length);
   var value = currentArray[index];
   currentArray.splice(index, 1);
@@ -43,36 +45,38 @@ function compareRandom() {
 }
 
 for (var i = 1; i <= 8; i++) {
+  var locationX = getRandomInt(300, 900);
+  var locationY = getRandomInt(130, 630);
   var advert = {
     'author': {
       'avatar': 'img/avatars/user0' + i + '.png'
     },
     'offer': {
-      'title': getUniqueChoice(titleChoices),
+      'title': getUniqueItem(TITLES),
       'price': getRandomInt(1000, 1000000),
-      'type': translateType[getRandomChoice(typeChoices)],
+      'type': TRANSLATE_TYPE[getRandomChoice(TYPES)],
       'rooms': getRandomInt(1, 5),
       'guests': getRandomInt(1, 10),
-      'checkin': getRandomChoice(timeChoices),
-      'checkout': getRandomChoice(timeChoices),
-      'features': featuresChoices.sort(compareRandom).slice(
-          getRandomInt(0, featuresChoices.length)),
+      'checkin': getRandomChoice(TIMES),
+      'checkout': getRandomChoice(TIMES),
+      'features': FEATURES.sort(compareRandom).slice(
+          getRandomInt(0, FEATURES.length)),
       'description': '',
-      'photos': photosChoices.sort(compareRandom)
+      'photos': PHOTOS.sort(compareRandom)
     },
     'location': {
-      'x': getRandomInt(300, 900),
-      'y': getRandomInt(130, 630)
+      'x': locationX,
+      'y': locationY
     }
   };
-  advert.offer.address = advert.location.x + ', ' + advert.location.y;
+  advert.offer.address = locationX + ', ' + locationY;
   nearestAdverts.push(advert);
 }
 
 map.classList.remove('map--faded');
 
 var getMapElement = function (element) {
-  var clonedElement = mapTemplate.cloneNode(true);
+  var clonedElement = cardTemplate.cloneNode(true);
   clonedElement.querySelector('.popup__title').textContent
     = element.offer.title;
   clonedElement.querySelector('.popup__text--address').textContent
@@ -98,12 +102,11 @@ var getMapElement = function (element) {
 
   clonedElement.querySelector('.popup__photo').remove();
   clonedElement.querySelector('.popup__avatar').src = element.author.avatar;
-  clonedElement.querySelector('.map__pin').firstElementChild.src
-    = element.author.avatar;
+  clonedElement.querySelector('.map__pin img').src = element.author.avatar;
   clonedElement.querySelector('.map__pin').style.left
-    = (element.location.x - 20) + 'px';
+    = (element.location.x - pinHalfWidth) + 'px';
   clonedElement.querySelector('.map__pin').style.top
-    = (element.location.y - 40) + 'px';
+    = (element.location.y - pinHeight) + 'px';
   return clonedElement;
 };
 
