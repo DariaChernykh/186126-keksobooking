@@ -75,6 +75,7 @@ for (var i = 1; i <= 8; i++) {
   advert.offer.address = locationX + ', ' + locationY;
   nearestAdverts.push(advert);
 }
+
 map.classList.remove('map--faded');
 
 nearestAdverts.forEach(function (element) {
@@ -86,6 +87,32 @@ nearestAdverts.forEach(function (element) {
     = (element.location.y - pinHeight) + 'px';
   map.appendChild(clonedPin);
 });
+
+var addFeatures = function (parent) {
+  var popup = parent.querySelector('.popup__features');
+  popup.innerHTML = '';
+  advert.offer.features.forEach(function (feature) {
+    var li = document.createElement('li');
+    var featureClassName = 'popup__feature--' + feature;
+    li.classList.add('popup__feature', featureClassName);
+    popup.appendChild(li);
+  });
+};
+
+var addPhotos = function (photos, parent) {
+  photos.forEach(function (photo, index) {
+    var image = new Image(45, 40);
+    image.src = photo;
+    image.classList.add('popup__photo');
+    image.alt = 'Фотография жилья';
+    if (index === 0) {
+      var oldImage = parent.querySelector('.popup__photo');
+      parent.querySelector('.popup__photos').replaceChild(image, oldImage);
+    } else {
+      parent.querySelector('.popup__photos').appendChild(image);
+    }
+  });
+};
 
 nearestAdverts.forEach(function (element) {
   var clonedCard = mapCard.cloneNode(true);
@@ -101,28 +128,10 @@ nearestAdverts.forEach(function (element) {
   clonedCard.querySelector('.popup__text--time').textContent
     = 'Заезд после ' + advert.offer.checkin + ', выезд до '
     + element.offer.checkout;
-
-  var clonedElementsLi = clonedCard.querySelectorAll('.popup__features li');
-  clonedElementsLi.forEach(function (object) {
-    var itemPrefix = 'popup__feature--';
-    var item = object.classList[1].replace(itemPrefix, '');
-    if (!element.offer.features.includes(item)) {
-      clonedCard.querySelector('.' + itemPrefix + item).style.display = 'none';
-    }
-  });
-
+  addFeatures(clonedCard);
+  addPhotos(element.offer.photos, clonedCard);
   clonedCard.querySelector('.popup__description').textContent
     = element.offer.description;
-
-  clonedCard.querySelector('.popup__photo').style.display = 'none';
-  element.offer.photos.forEach(function (value) {
-    var image = new Image(45, 40);
-    image.src = value;
-    image.classList.add('popup__photo');
-    image.setAttribute('alt', 'Фотография жилья');
-    clonedCard.querySelector('.popup__photos').appendChild(image);
-  });
-
   clonedCard.querySelector('.popup__avatar').src = element.author.avatar;
   renderAds.push(clonedCard);
 });
