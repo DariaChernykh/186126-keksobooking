@@ -102,25 +102,27 @@ nearestAdverts.forEach(function (element) {
     = 'Заезд после ' + advert.offer.checkin + ', выезд до '
     + element.offer.checkout;
 
-  clonedCard.querySelectorAll('.popup__features li').forEach(function (object) {
+  var clonedElementsLi = clonedCard.querySelectorAll('.popup__features li');
+  clonedElementsLi.forEach(function (object) {
     var itemPrefix = 'popup__feature--';
     var item = object.classList[1].replace(itemPrefix, '');
     if (!element.offer.features.includes(item)) {
-      clonedCard.querySelector('.' + itemPrefix + item).remove();
+      clonedCard.querySelector('.' + itemPrefix + item).style.display = 'none';
     }
   });
 
   clonedCard.querySelector('.popup__description').textContent
     = element.offer.description;
-  clonedCard.querySelector('.popup__photo').src = element.offer.photos[0];
 
-  for (i = 1; i < element.offer.photos.length; i++) {
+  clonedCard.querySelector('.popup__photo').style.display = 'none';
+  element.offer.photos.forEach(function (value) {
     var image = new Image(45, 40);
-    image.src = element.offer.photos[i];
+    image.src = value;
     image.classList.add('popup__photo');
     image.setAttribute('alt', 'Фотография жилья');
     clonedCard.querySelector('.popup__photos').appendChild(image);
-  }
+  });
+
   clonedCard.querySelector('.popup__avatar').src = element.author.avatar;
   renderAds.push(clonedCard);
 });
