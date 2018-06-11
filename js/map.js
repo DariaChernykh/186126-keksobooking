@@ -101,8 +101,15 @@ nearestAdverts.forEach(function (element) {
   clonedCard.querySelector('.popup__text--time').textContent
     = 'Заезд после ' + advert.offer.checkin + ', выезд до '
     + element.offer.checkout;
-  clonedCard.querySelector('.popup__features li').textContent
-    = element.offer.features;
+
+  clonedCard.querySelectorAll('.popup__features li').forEach(function (object) {
+    var itemPrefix = 'popup__feature--';
+    var item = object.classList[1].replace(itemPrefix, '');
+    if (!element.offer.features.includes(item)) {
+      clonedCard.querySelector('.' + itemPrefix + item).remove();
+    }
+  });
+
   clonedCard.querySelector('.popup__description').textContent
     = element.offer.description;
   clonedCard.querySelector('.popup__photo').src = element.offer.photos[0];
@@ -119,4 +126,3 @@ nearestAdverts.forEach(function (element) {
 });
 
 map.insertBefore(renderAds[0], mapFiltersContainer);
-
