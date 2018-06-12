@@ -5,7 +5,7 @@ var mapCard = cardTemplate.content.querySelector('.map__card');
 var mapPin = cardTemplate.content.querySelector('.map__pin');
 var map = document.querySelector('.map');
 var mapFiltersContainer = document.querySelector('.map__filters-container');
-var cards = [];
+
 var titleChoices = ['Большая уютная квартира', 'Маленькая неуютная квартира',
   'Огромный прекрасный дворец', 'Маленький ужасный дворец',
   'Красивый гостевой домик', 'Некрасивый негостеприимный домик',
@@ -31,6 +31,15 @@ var MIN_Y = 130;
 var MAX_Y = 630;
 var IMAGE_WIDTH = 45;
 var IMAGE_HEIGHT = 40;
+var MIN_PRICE = 1000;
+var MAX_PRICE = 1000000;
+var MIN_ROOMS = 1;
+var MAX_ROOMS = 5;
+var MIN_GUESTS = 1;
+var MAX_GUESTS = 10;
+var NUMBERS_OF_ADVERTS = 8;
+
+var cards = [];
 
 var getUniqueItem = function (currentArray) {
   var index = Math.floor(Math.random() * currentArray.length);
@@ -53,7 +62,7 @@ var compareRandom = function () {
 
 var createAdverts = function () {
   var adverts = [];
-  for (var i = 1; i <= 8; i++) {
+  for (var i = 1; i <= NUMBERS_OF_ADVERTS; i++) {
     var locationX = getRandomInt(MIN_X, MAX_X);
     var locationY = getRandomInt(MIN_Y, MAX_Y);
     var advert = {
@@ -62,10 +71,10 @@ var createAdverts = function () {
       },
       'offer': {
         'title': getUniqueItem(titleChoices),
-        'price': getRandomInt(1000, 1000000),
+        'price': getRandomInt(MIN_PRICE, MAX_PRICE),
         'type': TRANSLATE_TYPE[getRandomChoice(TYPES)],
-        'rooms': getRandomInt(1, 5),
-        'guests': getRandomInt(1, 10),
+        'rooms': getRandomInt(MIN_ROOMS, MAX_ROOMS),
+        'guests': getRandomInt(MIN_GUESTS, MAX_GUESTS),
         'checkin': getRandomChoice(TIMES),
         'checkout': getRandomChoice(TIMES),
         'features': features.sort(compareRandom).slice(
