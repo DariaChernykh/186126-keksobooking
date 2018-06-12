@@ -5,9 +5,7 @@ var mapCard = cardTemplate.content.querySelector('.map__card');
 var mapPin = cardTemplate.content.querySelector('.map__pin');
 var map = document.querySelector('.map');
 var mapFiltersContainer = document.querySelector('.map__filters-container');
-
 var cards = [];
-
 var titleChoices = ['Большая уютная квартира', 'Маленькая неуютная квартира',
   'Огромный прекрасный дворец', 'Маленький ужасный дворец',
   'Красивый гостевой домик', 'Некрасивый негостеприимный домик',
@@ -25,36 +23,39 @@ var TRANSLATE_TYPE = {
   'house': 'Дом',
   'bungalo': 'Бунгало'
 };
-var pinHalfWidth = 20;
-var pinHeight = 40;
-var minX = 300;
-var maxX = 900;
-var minY = 130;
-var maxY = 630;
+var PIN_HALF_WIDTH = 20;
+var PIN_HEIGHT = 40;
+var MIN_X = 300;
+var MAX_X = 900;
+var MIN_Y = 130;
+var MAX_Y = 630;
+var IMAGE_WIDTH = 45;
+var IMAGE_HEIGHT = 40;
 
-function getUniqueItem(currentArray) {
+var getUniqueItem = function (currentArray) {
   var index = Math.floor(Math.random() * currentArray.length);
   var value = currentArray[index];
   currentArray.splice(index, 1);
   return value;
-}
+};
 
-function getRandomChoice(currentArray) {
+var getRandomChoice = function (currentArray) {
   return currentArray[Math.floor(Math.random() * currentArray.length)];
-}
+};
 
-function getRandomInt(min, max) {
+var getRandomInt = function (min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
-}
+};
 
-function compareRandom() {
+var compareRandom = function () {
   return Math.random() - 0.5;
-}
+};
+
 var createAdverts = function () {
   var adverts = [];
   for (var i = 1; i <= 8; i++) {
-    var locationX = getRandomInt(minX, maxX);
-    var locationY = getRandomInt(minY, maxY);
+    var locationX = getRandomInt(MIN_X, MAX_X);
+    var locationY = getRandomInt(MIN_Y, MAX_Y);
     var advert = {
       'author': {
         'avatar': 'img/avatars/user0' + i + '.png'
@@ -91,14 +92,14 @@ var createPins = function () {
     var pin = mapPin.cloneNode(true);
     pin.querySelector('img').src = advert.author.avatar;
     pin.style.left
-      = (advert.location.x - pinHalfWidth) + 'px';
+      = (advert.location.x - PIN_HALF_WIDTH) + 'px';
     pin.style.top
-      = (advert.location.y - pinHeight) + 'px';
+      = (advert.location.y - PIN_HEIGHT) + 'px';
     map.appendChild(pin);
   });
 };
 
-var renderCard = function () {
+var createCards = function () {
   adverts.forEach(function (advert) {
     var card = mapCard.cloneNode(true);
     card.querySelector('.popup__title').textContent
@@ -113,19 +114,21 @@ var renderCard = function () {
     card.querySelector('.popup__text--time').textContent
       = 'Заезд после ' + advert.offer.checkin + ', выезд до '
       + advert.offer.checkout;
-    addFeatures(card);
-    addPhotos(advert.offer.photos, card);
     card.querySelector('.popup__description').textContent
       = advert.offer.description;
     card.querySelector('.popup__avatar').src = advert.author.avatar;
+
+    addFeatures(advert.offer.features, card);
+    addPhotos(advert.offer.photos, card);
+
     cards.push(card);
   });
 };
 
-var addFeatures = function (parent) {
+var addFeatures = function (sortedFeatures, parent) {
   var popup = parent.querySelector('.popup__features');
   popup.innerHTML = '';
-  adverts[2].offer.features.forEach(function (feature) {
+  sortedFeatures.forEach(function (feature) {
     var li = document.createElement('li');
     var featureClassName = 'popup__feature--' + feature;
     li.classList.add('popup__feature', featureClassName);
@@ -134,21 +137,22 @@ var addFeatures = function (parent) {
 };
 
 var addPhotos = function (photos, parent) {
+  var photoPopup = parent.querySelector('.popup__photos');
   photos.forEach(function (photo, index) {
-    var image = new Image(45, 40);
+    var image = new Image(IMAGE_WIDTH, IMAGE_HEIGHT);
     image.src = photo;
     image.classList.add('popup__photo');
     image.alt = 'Фотография жилья';
     if (index === 0) {
       var oldImage = parent.querySelector('.popup__photo');
-      parent.querySelector('.popup__photos').replaceChild(image, oldImage);
+      photoPopup.replaceChild(image, oldImage);
     } else {
-      parent.querySelector('.popup__photos').appendChild(image);
+      photoPopup.appendChild(image);
     }
   });
 };
 
 createPins();
-renderCard();
+createCards();
 
 map.insertBefore(cards[0], mapFiltersContainer);
