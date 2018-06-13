@@ -164,4 +164,33 @@ var addPhotos = function (photos, parent) {
 createPins();
 createCards();
 
-map.insertBefore(cards[0], mapFiltersContainer);
+// map.insertBefore(cards[0], mapFiltersContainer);
+
+map.classList.add('map--faded');
+var adForm = document.querySelector('.ad-form');
+var adFieldsets = document.querySelectorAll('.ad-form__element');
+var pinMain = document.querySelector('.map__pin--main');
+var pinMainTop = 404;
+var pinMainLeft = 602;
+var address = document.getElementById('address');
+address.placeholder = pinMainLeft + ', ' + pinMainTop;
+
+adFieldsets.forEach(function (fieldset) {
+  fieldset.disabled = true;
+});
+var onPinMainClick = function () {
+  map.classList.remove('map--faded');
+  adForm.classList.remove('ad-form--disabled');
+  address.placeholder = event.pageX + ', ' + event.pageY;
+  adFieldsets.forEach(function (form) {
+    form.disabled = false;
+  });
+};
+pinMain.addEventListener('mouseup', onPinMainClick);
+
+var pins = document.querySelectorAll('.map__pin');
+var onPinClick = function () {
+  pins.forEach.addEventListener('click', function (value, index) {
+    map.insertBefore(cards[index], mapFiltersContainer);
+  });
+};
