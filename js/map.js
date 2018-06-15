@@ -200,9 +200,9 @@ var onPinMainClick = function () {
 pinMain.addEventListener('mouseup', onPinMainClick);
 
 pins.forEach(function (pin, index) {
-  pin.addEventListener('click', onClick.bind(null, index))
+  pin.addEventListener('click', onClick.bind(null, index));
 });
 
 function onClick(index) {
-  map.insertBefore(cards[index], mapFiltersContainer)
-};
+  map.insertBefore(cards[index], mapFiltersContainer);
+}
