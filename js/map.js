@@ -40,6 +40,7 @@ var MAX_GUESTS = 10;
 var NUMBERS_OF_ADVERTS = 8;
 
 var cards = [];
+var adverts = [];
 
 var getUniqueItem = function (currentArray) {
   var index = Math.floor(Math.random() * currentArray.length);
@@ -61,7 +62,6 @@ var compareRandom = function () {
 };
 
 var createAdverts = function () {
-  var adverts = [];
   for (var i = 1; i <= NUMBERS_OF_ADVERTS; i++) {
     var locationX = getRandomInt(MIN_X, MAX_X);
     var locationY = getRandomInt(MIN_Y, MAX_Y);
@@ -104,6 +104,7 @@ var createPins = function () {
       = (advert.location.x - PIN_HALF_WIDTH) + 'px';
     pin.style.top
       = (advert.location.y - PIN_HEIGHT) + 'px';
+    pin.classList.add('map__pin--pick');
     map.appendChild(pin);
   });
 };
@@ -164,33 +165,45 @@ var addPhotos = function (photos, parent) {
 createPins();
 createCards();
 
-// map.insertBefore(cards[0], mapFiltersContainer);
+//module4-task1
 
-map.classList.add('map--faded');
 var adForm = document.querySelector('.ad-form');
 var adFieldsets = document.querySelectorAll('.ad-form__element');
 var pinMain = document.querySelector('.map__pin--main');
-var pinMainTop = 404;
-var pinMainLeft = 602;
+var pinMainTop = Number(pinMain.style.top.substr(0,3));
+var pinMainLeft = Number(pinMain.style.left.substr(0,3));
+var pinMainSize = 62;
+var pinMainHalfSize = pinMainSize / 2;
+var pinMainArrow = 22;
 var address = document.getElementById('address');
-address.placeholder = pinMainLeft + ', ' + pinMainTop;
+var pins = document.querySelectorAll('.map__pin--pick');
+
+map.classList.add('map--faded');
+
+address.placeholder = (pinMainLeft + pinMainHalfSize) + ', '
+  + (pinMainTop + pinMainHalfSize);
 
 adFieldsets.forEach(function (fieldset) {
   fieldset.disabled = true;
 });
+
 var onPinMainClick = function () {
   map.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
-  address.placeholder = event.pageX + ', ' + event.pageY;
+  address.placeholder = (pinMainLeft + pinMainHalfSize) + ', '
+    + (pinMainTop + pinMainSize + pinMainArrow);
   adFieldsets.forEach(function (form) {
     form.disabled = false;
   });
 };
+
 pinMain.addEventListener('mouseup', onPinMainClick);
 
-var pins = document.querySelectorAll('.map__pin');
-var onPinClick = function () {
-  pins.forEach.addEventListener('click', function (value, index) {
-    map.insertBefore(cards[index], mapFiltersContainer);
-  });
+
+pins.forEach(function(pin, index) {
+  pin.addEventListener('click', onClick.bind(null, index)) 
+});
+
+function onClick(index, evt) {
+  map.insertBefore(cards[index], mapFiltersContainer);
 };
