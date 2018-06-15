@@ -40,7 +40,6 @@ var MAX_GUESTS = 10;
 var NUMBERS_OF_ADVERTS = 8;
 
 var cards = [];
-var adverts = [];
 
 var getUniqueItem = function (currentArray) {
   var index = Math.floor(Math.random() * currentArray.length);
@@ -62,6 +61,7 @@ var compareRandom = function () {
 };
 
 var createAdverts = function () {
+  var adverts = [];
   for (var i = 1; i <= NUMBERS_OF_ADVERTS; i++) {
     var locationX = getRandomInt(MIN_X, MAX_X);
     var locationY = getRandomInt(MIN_Y, MAX_Y);
@@ -165,13 +165,13 @@ var addPhotos = function (photos, parent) {
 createPins();
 createCards();
 
-//module4-task1
+// modeule4-task1
 
 var adForm = document.querySelector('.ad-form');
 var adFieldsets = document.querySelectorAll('.ad-form__element');
 var pinMain = document.querySelector('.map__pin--main');
-var pinMainTop = Number(pinMain.style.top.substr(0,3));
-var pinMainLeft = Number(pinMain.style.left.substr(0,3));
+var pinMainTop = Number(pinMain.style.top.substr(0, 3));
+var pinMainLeft = Number(pinMain.style.left.substr(0, 3));
 var pinMainSize = 62;
 var pinMainHalfSize = pinMainSize / 2;
 var pinMainArrow = 22;
@@ -199,11 +199,10 @@ var onPinMainClick = function () {
 
 pinMain.addEventListener('mouseup', onPinMainClick);
 
-
-pins.forEach(function(pin, index) {
-  pin.addEventListener('click', onClick.bind(null, index)) 
+pins.forEach(function (pin, index) {
+  pin.addEventListener('click', onClick.bind(null, index))
 });
 
-function onClick(index, evt) {
-  map.insertBefore(cards[index], mapFiltersContainer);
+function onClick(index) {
+  map.insertBefore(cards[index], mapFiltersContainer)
 };
