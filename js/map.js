@@ -186,17 +186,16 @@ map.classList.add('map--faded');
 address.placeholder = (pinMainLeft + PIN_MAIN_HALF_SIZE) + ', '
   + (pinMainTop + PIN_MAIN_HALF_SIZE);
 
-var hideFieldset = function () {
+var toggleFieldsetsVisability = function (state) {
   fieldsets.forEach(function (fieldset) {
-    fieldset.disabled = true;
+    fieldset.disabled = state;
   });
 };
 
-hideFieldset();
+toggleFieldsetsVisability(true);
 
 var onPinClick = function (index) {
-  var popup = map.querySelector('.map__card');
-
+  var popup = map.querySelector('.popup');
   if (popup) {
     popup.remove();
   }
@@ -216,9 +215,8 @@ var onPinMainClick = function () {
   form.classList.remove('ad-form--disabled');
   address.placeholder = (pinMainLeft + PIN_MAIN_HALF_SIZE) + ', '
     + (pinMainTop + PIN_MAIN_SIZE + PIN_MAIN_ARROW);
-  fieldsets.forEach(function (fieldset) {
-    fieldset.disabled = false;
-  });
+
+  toggleFieldsetsVisability(false);
   renderPins();
 };
 
