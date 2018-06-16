@@ -221,3 +221,89 @@ var onPinMainClick = function () {
 };
 
 pinMain.addEventListener('mouseup', onPinMainClick);
+
+// modeule4-task2
+var title = form.elements.title;
+var price = form.elements.price;
+
+var MIN_LENGTH = 30;
+var MAX_LENGTH = 100;
+var MIN_PRICES = [0, 1000, 5000, 10000];
+
+title.minLength = MIN_LENGTH;
+title.maxLength = MAX_LENGTH;
+title.required = true;
+title.type = 'text';
+
+price.required = true;
+price.type = 'number';
+price.max = MAX_PRICE;
+
+address.readOnly = true;
+
+var select = form.elements.type;
+var options = Array.from(select.options);
+var onSelectorChange = function () {
+  options.forEach(function (option, index) {
+    if (option.selected) {
+      price.min = MIN_PRICES[index];
+      price.placeholder = MIN_PRICES[index];
+    }
+  });
+};
+
+select.addEventListener('change', onSelectorChange);
+
+var timeIn = form.elements.timein;
+var timeOut = form.elements.timeout;
+
+var chooseTime = function () {
+  timeIn.onchange = function () {
+    timeOut.selectedIndex = this.selectedIndex;
+  };
+  timeOut.onchange = function () {
+    timeIn.selectedIndex = this.selectedIndex;
+  };
+};
+
+chooseTime();
+
+var rooms = form.elements.rooms;
+var capacity = form.elements.capacity;
+var syncCapacity = function (array) {
+  var capacityOptions = capacity.querySelectorAll('option');
+  capacityOptions.forEach(function (element) {
+    if (array.indexOf(element.value) !== -1) {
+      element.disabled = false;
+      if (array.length === 1) {
+        element.selected = true;
+      }
+    } else {
+      element.disabled = true;
+      element.selected = false;
+    }
+  });
+};
+
+var chooseRoom = function () {
+  rooms.onchange = function () {
+    var room = rooms.options[rooms.selectedIndex].value;
+    switch (room) {
+      case '1':
+        syncCapacity(['1']);
+        break;
+      case '2':
+        syncCapacity(['1', '2']);
+        break;
+      case '3':
+        syncCapacity(['1', '2', '3']);
+        break;
+      case '100':
+        syncCapacity(['0']);
+        break;
+    }
+  };
+};
+
+chooseRoom();
+syncCapacity(['1']);
