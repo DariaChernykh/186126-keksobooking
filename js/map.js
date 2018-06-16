@@ -242,9 +242,9 @@ price.max = MAX_PRICE;
 address.readOnly = true;
 
 var select = form.elements.type;
-var options = Array.from(select.options);
+var priceOptions = Array.from(select.options);
 var onSelectorChange = function () {
-  options.forEach(function (option, index) {
+  priceOptions.forEach(function (option, index) {
     if (option.selected) {
       price.min = MIN_PRICES[index];
       price.placeholder = MIN_PRICES[index];
@@ -271,16 +271,16 @@ chooseTime();
 var rooms = form.elements.rooms;
 var capacity = form.elements.capacity;
 var syncCapacity = function (array) {
-  var capacityOptions = capacity.querySelectorAll('option');
-  capacityOptions.forEach(function (element) {
-    if (array.indexOf(element.value) !== -1) {
-      element.disabled = false;
+  var capacityOptions = Array.from(capacity.options);
+  capacityOptions.forEach(function (option) {
+    if (array.indexOf(option.value) !== -1) {
+      option.disabled = false;
       if (array.length === 1) {
-        element.selected = true;
+        option.selected = true;
       }
     } else {
-      element.disabled = true;
-      element.selected = false;
+      option.disabled = true;
+      option.selected = false;
     }
   });
 };
