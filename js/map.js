@@ -105,7 +105,6 @@ var createPins = function () {
       = (advert.location.x - PIN_HALF_WIDTH) + 'px';
     pin.style.top
       = (advert.location.y - PIN_HEIGHT) + 'px';
-    // map.appendChild(pin);
     pins.push(pin);
   });
   return pins;
@@ -213,7 +212,7 @@ var renderPins = function () {
 var onPinMainClick = function () {
   map.classList.remove('map--faded');
   form.classList.remove('ad-form--disabled');
-  address.placeholder = (pinMainLeft + PIN_MAIN_HALF_SIZE) + ', '
+  address.value = (pinMainLeft + PIN_MAIN_HALF_SIZE) + ', '
     + (pinMainTop + PIN_MAIN_SIZE + PIN_MAIN_ARROW);
 
   toggleFieldsetsVisability(false);
@@ -222,29 +221,55 @@ var onPinMainClick = function () {
 
 pinMain.addEventListener('mouseup', onPinMainClick);
 
+// var close = mapCard.querySelector('.popup__close');
+//
+// console.log(close);
+// var onCloseClick = function () {
+//   var card = map.querySelector('.map__card');
+//   map.parentNode.removeChild(card);
+// };
+//
+// close.addEventListener('click', onCloseClick);
+
 // modeule4-task2
 var title = form.elements.title;
 var price = form.elements.price;
+var selectType = form.elements.type;
+var selectTimeIn = form.elements.timein;
+var selectTimeOut = form.elements.timeout;
+var rooms = form.elements.rooms;
+var capacity = form.elements.capacity;
+
+var priceOption = Array.from(selectType.options);
+var capacityOption = Array.from(capacity.options);
 
 var MIN_LENGTH = 30;
 var MAX_LENGTH = 100;
 var MIN_PRICES = [0, 1000, 5000, 10000];
+var roomsCapacity = {
+  '1': ['1'],
+  '2': ['1', '2'],
+  '3': ['1', '2', '3'],
+  '100': ['0']
+};
 
-title.minLength = MIN_LENGTH;
-title.maxLength = MAX_LENGTH;
-title.required = true;
-title.type = 'text';
+var setDefaultValues = function () {
+  title.minLength = MIN_LENGTH;
+  title.maxLength = MAX_LENGTH;
+  title.required = true;
+  title.type = 'text';
 
-price.required = true;
-price.type = 'number';
-price.max = MAX_PRICE;
+  price.required = true;
+  price.type = 'number';
+  price.max = MAX_PRICE;
 
-address.readOnly = true;
+  address.readOnly = true;
+};
 
-var select = form.elements.type;
-var priceOptions = Array.from(select.options);
+setDefaultValues();
+
 var onSelectorChange = function () {
-  priceOptions.forEach(function (option, index) {
+  priceOption.forEach(function (option, index) {
     if (option.selected) {
       price.min = MIN_PRICES[index];
       price.placeholder = MIN_PRICES[index];
@@ -252,58 +277,30 @@ var onSelectorChange = function () {
   });
 };
 
-select.addEventListener('change', onSelectorChange);
+selectType.addEventListener('change', onSelectorChange);
 
-var timeIn = form.elements.timein;
-var timeOut = form.elements.timeout;
-
-var chooseTime = function () {
-  timeIn.onchange = function () {
-    timeOut.selectedIndex = this.selectedIndex;
-  };
-  timeOut.onchange = function () {
-    timeIn.selectedIndex = this.selectedIndex;
-  };
+var onOptionTimeInChange = function (evt) {
+  selectTimeOut.selectedIndex = evt.target.selectedIndex;
+};
+var onOptionTimeOutChange = function (evt) {
+  selectTimeIn.selectedIndex = evt.target.selectedIndex;
 };
 
-chooseTime();
+selectTimeIn.addEventListener('change', onOptionTimeInChange);
+selectTimeOut.addEventListener('change', onOptionTimeOutChange);
 
-var rooms = form.elements.rooms;
-var capacity = form.elements.capacity;
-var syncCapacity = function (array) {
-  var capacityOptions = Array.from(capacity.options);
-  capacityOptions.forEach(function (option) {
-    if (array.indexOf(option.value) !== -1) {
+var chooseRoom = function () {
+  var room = rooms.options[rooms.selectedIndex].value;
+  var selectedValues = roomsCapacity[room];
+  capacityOption.forEach(function (option) {
+    if (selectedValues.includes(option.value)) {
       option.disabled = false;
-      if (array.length === 1) {
-        option.selected = true;
-      }
     } else {
-      option.disabled = true;
       option.selected = false;
+      option.disabled = true;
     }
   });
 };
 
-var chooseRoom = function () {
-  rooms.onchange = function () {
-    var room = rooms.options[rooms.selectedIndex].value;
-    switch (room) {
-      case '1':
-        syncCapacity(['1']);
-        break;
-      case '2':
-        syncCapacity(['1', '2']);
-        break;
-      case '3':
-        syncCapacity(['1', '2', '3']);
-        break;
-      case '100':
-        syncCapacity(['0']);
-        break;
-    }
-  };
-};
-
 chooseRoom();
-syncCapacity(['1']);
+rooms.addEventListener('change', chooseRoom);
