@@ -105,6 +105,7 @@ var createPins = function () {
       = (advert.location.x - PIN_HALF_WIDTH) + 'px';
     pin.style.top
       = (advert.location.y - PIN_HEIGHT) + 'px';
+    pin.tabIndex = '0';
     pins.push(pin);
   });
   return pins;
@@ -240,6 +241,7 @@ var capacity = form.elements.capacity;
 var priceOption = Array.from(selectType.options);
 var capacityOption = Array.from(capacity.options);
 
+
 var MIN_LENGTH = 30;
 var MAX_LENGTH = 100;
 var MIN_PRICES = [0, 1000, 5000, 10000];
@@ -301,3 +303,13 @@ var chooseRoom = function () {
 
 chooseRoom();
 rooms.addEventListener('change', chooseRoom);
+
+var setSendButton = function () {
+  var sendButton = document.querySelector('.ad-form__submit');
+  sendButton.formAction = 'https://js.dump.academy/keksobooking';
+  sendButton.formMethod = 'post';
+  sendButton.formEnctype = 'multipart/form-data';
+};
+
+setSendButton();
+
