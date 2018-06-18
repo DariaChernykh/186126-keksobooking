@@ -200,6 +200,13 @@ var onPinClick = function (index) {
   }
 
   map.insertBefore(cards[index], mapFiltersContainer);
+
+  var close = map.querySelector('.popup__close');
+  var onCloseClick = function () {
+    map.removeChild(cards[index]);
+  };
+
+  close.addEventListener('click', onCloseClick);
 };
 
 var renderPins = function () {
@@ -220,16 +227,6 @@ var onPinMainClick = function () {
 };
 
 pinMain.addEventListener('mouseup', onPinMainClick);
-
-// var close = mapCard.querySelector('.popup__close');
-//
-// console.log(close);
-// var onCloseClick = function () {
-//   var card = map.querySelector('.map__card');
-//   map.parentNode.removeChild(card);
-// };
-//
-// close.addEventListener('click', onCloseClick);
 
 // modeule4-task2
 var title = form.elements.title;
