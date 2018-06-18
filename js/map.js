@@ -240,7 +240,8 @@ var capacity = form.elements.capacity;
 
 var priceOption = Array.from(selectType.options);
 var capacityOption = Array.from(capacity.options);
-
+var sendButton = document.querySelector('.ad-form__submit');
+var inputs = document.querySelectorAll('input');
 
 var MIN_LENGTH = 30;
 var MAX_LENGTH = 100;
@@ -276,6 +277,7 @@ var onSelectorChange = function () {
   });
 };
 
+onSelectorChange(priceOption.selectedIndex);
 selectType.addEventListener('change', onSelectorChange);
 
 var onOptionTimeInChange = function (evt) {
@@ -304,12 +306,20 @@ var chooseRoom = function () {
 chooseRoom();
 rooms.addEventListener('change', chooseRoom);
 
-var setSendButton = function () {
-  var sendButton = document.querySelector('.ad-form__submit');
-  sendButton.formAction = 'https://js.dump.academy/keksobooking';
-  sendButton.formMethod = 'post';
-  sendButton.formEnctype = 'multipart/form-data';
+var onSendButtonClick = function () {
+  inputs.forEach(function (input) {
+    if (input.validity.valueMissing) {
+      input.setCustomValidity('Fill this field');
+    } else if (input.validity.tooShort) {
+      input.setCustomValidity('This should be longer than ' + input.minLength);
+    } else if (input.validity.rangeUnderflow) {
+      input.setCustomValidity('This should be greater than' + input.min);
+    } else if (input.validity.rangeOverflow) {
+      input.setCustomValidity('This should be less then ' + input.max);
+    } else {
+      input.setCustomValidity('');
+    }
+  });
 };
 
-setSendButton();
-
+sendButton.addEventListener('click', onSendButtonClick);
