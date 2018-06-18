@@ -296,6 +296,7 @@ var chooseRoom = function () {
   capacityOption.forEach(function (option) {
     if (selectedValues.includes(option.value)) {
       option.disabled = false;
+      option.selected = true;
     } else {
       option.selected = false;
       option.disabled = true;
