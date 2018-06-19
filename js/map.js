@@ -225,6 +225,7 @@ var onPinMainClick = function () {
 
   toggleFieldsetsVisability(false);
   renderPins();
+  onRoomFieldsetChange();
 };
 
 pinMain.addEventListener('mouseup', onPinMainClick);
@@ -235,13 +236,14 @@ var price = form.elements.price;
 var selectType = form.elements.type;
 var selectTimeIn = form.elements.timein;
 var selectTimeOut = form.elements.timeout;
-var rooms = form.elements.rooms;
+var roomFieldset = form.elements.rooms;
 var capacity = form.elements.capacity;
+var sendButton = document.querySelector('.ad-form__submit');
+var reset = document.querySelector('.ad-form__reset');
+var inputs = document.querySelectorAll('input');
 
 var priceOption = Array.from(selectType.options);
 var capacityOption = Array.from(capacity.options);
-var sendButton = document.querySelector('.ad-form__submit');
-var inputs = document.querySelectorAll('input');
 
 var MIN_LENGTH = 30;
 var MAX_LENGTH = 100;
@@ -290,8 +292,8 @@ var onOptionTimeOutChange = function (evt) {
 selectTimeIn.addEventListener('change', onOptionTimeInChange);
 selectTimeOut.addEventListener('change', onOptionTimeOutChange);
 
-var chooseRoom = function () {
-  var room = rooms.options[rooms.selectedIndex].value;
+var onRoomFieldsetChange = function () {
+  var room = roomFieldset.options[roomFieldset.selectedIndex].value;
   var selectedValues = roomsCapacity[room];
   capacityOption.forEach(function (option) {
     if (selectedValues.includes(option.value)) {
@@ -304,23 +306,44 @@ var chooseRoom = function () {
   });
 };
 
-chooseRoom();
-rooms.addEventListener('change', chooseRoom);
+roomFieldset.addEventListener('change', onRoomFieldsetChange);
 
-var onSendButtonClick = function () {
-  inputs.forEach(function (input) {
-    if (input.validity.valueMissing) {
-      input.setCustomValidity('Fill this field');
-    } else if (input.validity.tooShort) {
-      input.setCustomValidity('This should be longer than ' + input.minLength);
-    } else if (input.validity.rangeUnderflow) {
-      input.setCustomValidity('This should be greater than' + input.min);
-    } else if (input.validity.rangeOverflow) {
-      input.setCustomValidity('This should be less then ' + input.max);
-    } else {
-      input.setCustomValidity('');
-    }
-  });
+reset.addEventListener('click', function(){
+  map.classList.add('map--faded');
+  form.reset();
+  form.classList.add('ad-form--disabled');
+  toggleFieldsetsVisability(true);
+  removePins();
+})
+
+var removePins = function () {
+  pins.forEach(function (pin) {
+    map.removeChild(pin);
+  })
 };
 
-sendButton.addEventListener('click', onSendButtonClick);
+var test = function (evt) {
+  if (!evt.target.validity.valid) {      
+    evt.target.classList.add('invalid');
+    } else {
+      evt.target.classList.remove('invalid');
+      evt.target.removeEventListener('change', test)
+    };
+  console.log(evt.target);
+    
+ 
+    if (evt.target.validity.valueMissing) {
+      evt.target.setCustomValidity('Fill this field');
+    } else if (evt.target.validity.tooShort) {
+      evt.target.setCustomValidity('This should be longer than ' +
+        evt.target.minLength);
+    } else if (evt.target.validity.rangeUnderflow) {
+      evt.target.setCustomValidity('This should be greater than' + evt.target.min);
+    } else if (evt.target.validity.rangeOverflow) {
+      evt.target.setCustomValidity('This should be less then ' + evt.target.max);
+    } else {
+      evt.target.setCustomValidity('');
+    };
+}
+
+form.addEventListener('change', test)
