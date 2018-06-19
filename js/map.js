@@ -269,6 +269,7 @@ var selectTimeIn = form.elements.timein;
 var selectTimeOut = form.elements.timeout;
 var roomFieldset = form.elements.rooms;
 var capacity = form.elements.capacity;
+var submitBtn = form.querySelector('.ad-form__submit');
 var reset = document.querySelector('.ad-form__reset');
 
 var priceOptions = Array.from(selectType.options);
@@ -361,13 +362,14 @@ var onResetClick = function () {
 };
 reset.addEventListener('click', onResetClick);
 
-var onFormInvalid = function (evt) {
-  var currentInput = evt.target;
-  if (!currentInput.validity.valid) {
-    currentInput.classList.add('invalid');
-  } else {
-    currentInput.classList.remove('invalid');
-    currentInput.removeEventListener('change', onFormInvalid);
-  }
+var onSubmitBtnClick = function () {
+  var inputs = form.querySelectorAll('input:required');
+  inputs.forEach(function (input) {
+    if (!input.validity.valid) {
+      input.classList.add('invalid');
+    } else {
+      input.classList.remove('invalid');
+    }
+  });
 };
-form.addEventListener('invalid', onFormInvalid, true);
+submitBtn.addEventListener('click', onSubmitBtnClick);
