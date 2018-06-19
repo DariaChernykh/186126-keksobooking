@@ -23,6 +23,7 @@ var TRANSLATE_TYPE = {
   'house': 'Дом',
   'bungalo': 'Бунгало'
 };
+
 var PIN_HALF_WIDTH = 20;
 var PIN_HEIGHT = 40;
 var MIN_X = 300;
@@ -94,7 +95,6 @@ var createAdverts = function () {
   return adverts;
 };
 
-map.classList.remove('map--faded');
 var adverts = createAdverts();
 
 var createPins = function () {
@@ -181,8 +181,6 @@ var PIN_MAIN_HALF_SIZE = PIN_MAIN_SIZE / 2;
 var pinMainTop = Number(pinMain.style.top.substr(0, 3));
 var pinMainLeft = Number(pinMain.style.left.substr(0, 3));
 
-map.classList.add('map--faded');
-
 address.placeholder = (pinMainLeft + PIN_MAIN_HALF_SIZE) + ', '
   + (pinMainTop + PIN_MAIN_HALF_SIZE);
 
@@ -194,6 +192,35 @@ var toggleFieldsetsVisability = function (state) {
 
 toggleFieldsetsVisability(true);
 
+var closeCard = function () {
+  var close = map.querySelector('.popup__close');
+  if (!close) {
+    return;
+  }
+
+  close.parentElement.remove();
+  close.removeEventListener('click', onCloseClick);
+  document.removeEventListener('keydown', onCloseClick);
+};
+
+var onCloseClick = function () {
+  closeCard();
+};
+
+var onCloseKeydown = function (evt) {
+  if (evt.keyCode === 27 || evt.keyCode === 13) {
+    closeCard();
+  }
+};
+
+var initCard = function () {
+  var close = map.querySelector('.popup__close');
+  close.focus();
+
+  close.addEventListener('click', onCloseClick);
+  document.addEventListener('keydown', onCloseKeydown);
+};
+
 var onPinClick = function (index) {
   var popup = map.querySelector('.popup');
   if (popup) {
@@ -201,13 +228,7 @@ var onPinClick = function (index) {
   }
 
   map.insertBefore(cards[index], mapFiltersContainer);
-
-  var close = map.querySelector('.popup__close');
-  var onCloseClick = function () {
-    map.removeChild(cards[index]);
-  };
-
-  close.addEventListener('click', onCloseClick);
+  initCard();
 };
 
 var renderPins = function () {
@@ -217,15 +238,25 @@ var renderPins = function () {
   });
 };
 
+var removePins = function () {
+  pins.forEach(function (pin) {
+    map.removeChild(pin);
+  });
+};
+
+var toggleContentVisability = function () {
+  map.classList.toggle('map--faded');
+  form.classList.toggle('ad-form--disabled');
+};
+
 var onPinMainClick = function () {
-  map.classList.remove('map--faded');
-  form.classList.remove('ad-form--disabled');
+  toggleContentVisability();
   address.value = (pinMainLeft + PIN_MAIN_HALF_SIZE) + ', '
     + (pinMainTop + PIN_MAIN_SIZE + PIN_MAIN_ARROW);
 
+  setDefaultValues();
   toggleFieldsetsVisability(false);
   renderPins();
-  onRoomFieldsetChange();
 };
 
 pinMain.addEventListener('mouseup', onPinMainClick);
@@ -240,8 +271,8 @@ var roomFieldset = form.elements.rooms;
 var capacity = form.elements.capacity;
 var reset = document.querySelector('.ad-form__reset');
 
-var priceOption = Array.from(selectType.options);
-var capacityOption = Array.from(capacity.options);
+var priceOptions = Array.from(selectType.options);
+var capacityOptions = Array.from(capacity.options);
 
 var MIN_LENGTH = 30;
 var MAX_LENGTH = 100;
@@ -264,12 +295,12 @@ var setDefaultValues = function () {
   price.max = MAX_PRICE;
 
   address.readOnly = true;
+  setPriceValues();
+  setRoomValues();
 };
 
-setDefaultValues();
-
-var onSelectorChange = function () {
-  priceOption.forEach(function (option, index) {
+var setPriceValues = function () {
+  priceOptions.forEach(function (option, index) {
     if (option.selected) {
       price.min = MIN_PRICES[index];
       price.placeholder = MIN_PRICES[index];
@@ -277,23 +308,25 @@ var onSelectorChange = function () {
   });
 };
 
-onSelectorChange(priceOption.selectedIndex);
-selectType.addEventListener('change', onSelectorChange);
+var onSelectTypeChange = function () {
+  setPriceValues();
+};
+selectType.addEventListener('change', onSelectTypeChange);
 
 var onOptionTimeInChange = function (evt) {
   selectTimeOut.selectedIndex = evt.target.selectedIndex;
 };
+selectTimeIn.addEventListener('change', onOptionTimeInChange);
+
 var onOptionTimeOutChange = function (evt) {
   selectTimeIn.selectedIndex = evt.target.selectedIndex;
 };
-
-selectTimeIn.addEventListener('change', onOptionTimeInChange);
 selectTimeOut.addEventListener('change', onOptionTimeOutChange);
 
-var onRoomFieldsetChange = function () {
+var setRoomValues = function () {
   var room = roomFieldset.options[roomFieldset.selectedIndex].value;
   var selectedValues = roomsCapacity[room];
-  capacityOption.forEach(function (option) {
+  capacityOptions.forEach(function (option) {
     if (selectedValues.includes(option.value)) {
       option.disabled = false;
       option.selected = true;
@@ -304,43 +337,37 @@ var onRoomFieldsetChange = function () {
   });
 };
 
+var onRoomFieldsetChange = function () {
+  setRoomValues();
+};
 roomFieldset.addEventListener('change', onRoomFieldsetChange);
 
-reset.addEventListener('click', function () {
-  map.classList.add('map--faded');
+var resetForm = function () {
+  var invalidInputs = form.querySelectorAll('.invalid');
+  if (invalidInputs) {
+    invalidInputs.forEach(function (input) {
+      input.classList.remove('invalid');
+    });
+  }
+
   form.reset();
-  form.classList.add('ad-form--disabled');
+};
+var onResetClick = function () {
+  toggleContentVisability();
   toggleFieldsetsVisability(true);
   removePins();
-});
-
-var removePins = function () {
-  pins.forEach(function (pin) {
-    map.removeChild(pin);
-  });
+  closeCard();
+  resetForm();
 };
+reset.addEventListener('click', onResetClick);
 
-var changeValue = function (evt) {
+var onFormInvalid = function (evt) {
   var currentInput = evt.target;
   if (!currentInput.validity.valid) {
     currentInput.classList.add('invalid');
   } else {
     currentInput.classList.remove('invalid');
-    currentInput.removeEventListener('change', changeValue);
-  }
-
-  if (currentInput.validity.valueMissing) {
-    currentInput.setCustomValidity('Fill this field');
-  } else if (currentInput.validity.tooShort) {
-    currentInput.setCustomValidity('This should be longer than ' +
-      currentInput.minLength);
-  } else if (currentInput.validity.rangeUnderflow) {
-    currentInput.setCustomValidity('This should be greater than ' + currentInput.min);
-  } else if (currentInput.validity.rangeOverflow) {
-    currentInput.setCustomValidity('This should be less than ' + currentInput.max);
-  } else {
-    currentInput.setCustomValidity('');
+    currentInput.removeEventListener('change', onFormInvalid);
   }
 };
-
-form.addEventListener('change', changeValue);
+form.addEventListener('invalid', onFormInvalid, true);
