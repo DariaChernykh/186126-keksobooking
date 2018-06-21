@@ -251,15 +251,60 @@ var toggleContentVisability = function () {
 
 var onPinMainClick = function () {
   toggleContentVisability();
-  address.value = (pinMainLeft + PIN_MAIN_HALF_SIZE) + ', '
-    + (pinMainTop + PIN_MAIN_SIZE + PIN_MAIN_ARROW);
-
   setDefaultValues();
   toggleFieldsetsVisability(false);
   renderPins();
 };
 
-pinMain.addEventListener('mouseup', onPinMainClick);
+var onPinMainMouseDown = function (evt) {
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+  address.value = (evt.clientX + PIN_MAIN_HALF_SIZE) + ', '
+    + (evt.clientY + PIN_MAIN_SIZE + PIN_MAIN_ARROW);
+
+  var dragged = false;
+
+  var onPinMainMouseMove = function (moveEvt) {
+    var MIN_TOP = 130;
+    var MAX_TOP = 630;
+
+    moveEvt.preventDefault();
+    dragged = true;
+
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
+    };
+    var pinStyleLeft = evt.clientX - shift.x;
+    var pinStyleTop = evt.clientY - shift.y;
+    var mapWidth = map.offsetWidth - PIN_MAIN_SIZE;
+    if (pinStyleTop > MIN_TOP &&
+        pinStyleTop < MAX_TOP &&
+        pinStyleLeft > 0 &&
+        pinStyleLeft < mapWidth) {
+      pinMain.style.left = pinStyleLeft + 'px';
+      pinMain.style.top = pinStyleTop + 'px';
+      address.value = (pinStyleLeft + PIN_MAIN_HALF_SIZE) + ', '
+        + (pinStyleTop + PIN_MAIN_SIZE + PIN_MAIN_ARROW);
+    }
+  };
+
+  var onPinMainMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+
+    document.removeEventListener('mousemove', onPinMainMouseMove);
+    document.removeEventListener('mouseup', onPinMainMouseUp);
+
+    if (dragged) {
+      pinMain.addEventListener('click', onPinMainClick);
+    }
+  };
+  document.addEventListener('mousemove', onPinMainMouseMove);
+  document.addEventListener('mouseup', onPinMainMouseUp);
+};
+pinMain.addEventListener('mousedown', onPinMainMouseDown);
 
 // modeule4-task2
 var title = form.elements.title;
