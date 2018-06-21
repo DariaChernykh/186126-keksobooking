@@ -177,6 +177,7 @@ var address = document.getElementById('address');
 var PIN_MAIN_SIZE = 62;
 var PIN_MAIN_ARROW = 22;
 var PIN_MAIN_HALF_SIZE = PIN_MAIN_SIZE / 2;
+var PIN_ALL = PIN_MAIN_SIZE + PIN_MAIN_ARROW;
 
 var pinMainTop = Number(pinMain.style.top.substr(0, 3));
 var pinMainLeft = Number(pinMain.style.left.substr(0, 3));
@@ -244,13 +245,9 @@ var removePins = function () {
   });
 };
 
-var toggleContentVisability = function () {
-  map.classList.toggle('map--faded');
-  form.classList.toggle('ad-form--disabled');
-};
-
 var onPinMainClick = function () {
-  toggleContentVisability();
+  map.classList.remove('map--faded');
+  form.classList.remove('ad-form--disabled');
   setDefaultValues();
   toggleFieldsetsVisability(false);
   renderPins();
@@ -261,14 +258,12 @@ var onPinMainMouseDown = function (evt) {
     x: evt.clientX,
     y: evt.clientY
   };
-  address.value = (evt.clientX + PIN_MAIN_HALF_SIZE) + ', '
-    + (evt.clientY + PIN_MAIN_SIZE + PIN_MAIN_ARROW);
 
   var dragged = false;
 
   var onPinMainMouseMove = function (moveEvt) {
-    var MIN_TOP = 130;
-    var MAX_TOP = 630;
+    var MIN_TOP = 130 - PIN_ALL;
+    var MAX_TOP = 630 - PIN_ALL;
 
     moveEvt.preventDefault();
     dragged = true;
@@ -279,15 +274,16 @@ var onPinMainMouseDown = function (evt) {
     };
     var pinStyleLeft = evt.clientX - shift.x;
     var pinStyleTop = evt.clientY - shift.y;
-    var mapWidth = map.offsetWidth - PIN_MAIN_SIZE;
-    if (pinStyleTop > MIN_TOP &&
-        pinStyleTop < MAX_TOP &&
-        pinStyleLeft > 0 &&
-        pinStyleLeft < mapWidth) {
-      pinMain.style.left = pinStyleLeft + 'px';
+    var pinGridX = map.offsetLeft + map.clientWidth - PIN_MAIN_SIZE;
+
+    if (pinStyleTop >= MIN_TOP &&
+        pinStyleTop <= MAX_TOP &&
+        pinStyleLeft > map.offsetLeft &&
+        pinStyleLeft < pinGridX) {
+      pinMain.style.left = (pinStyleLeft - map.offsetLeft) + 'px';
       pinMain.style.top = pinStyleTop + 'px';
       address.value = (pinStyleLeft + PIN_MAIN_HALF_SIZE) + ', '
-        + (pinStyleTop + PIN_MAIN_SIZE + PIN_MAIN_ARROW);
+        + (pinStyleTop + PIN_ALL);
     }
   };
 
@@ -299,6 +295,10 @@ var onPinMainMouseDown = function (evt) {
 
     if (dragged) {
       pinMain.addEventListener('click', onPinMainClick);
+      pinMain.style.left = pinMain.offsetLeft + 'px';
+      pinMain.style.top = pinMain.offsetTop + 'px';
+      address.value = (pinMain.offsetLeft + PIN_MAIN_HALF_SIZE) + ', '
+        + (pinMain.offsetTop + PIN_ALL);
     }
   };
   document.addEventListener('mousemove', onPinMainMouseMove);
@@ -399,7 +399,8 @@ var resetForm = function () {
   form.reset();
 };
 var onResetClick = function () {
-  toggleContentVisability();
+  map.classList.add('map--faded');
+  form.classList.add('ad-form--disabled');
   toggleFieldsetsVisability(true);
   removePins();
   closeCard();
