@@ -174,15 +174,16 @@ var fieldsets = document.querySelectorAll('.ad-form__element');
 var pinMain = document.querySelector('.map__pin--main');
 var address = document.getElementById('address');
 
-var PIN_MAIN_SIZE = 62;
-var PIN_MAIN_ARROW = 22;
-var PIN_MAIN_HALF_SIZE = PIN_MAIN_SIZE / 2;
+var pinMainSize = 62;
+var pinMainArrow = 22;
+var pinMainHalfSize = pinMainSize / 2;
+var pinMainAll = pinMainSize + pinMainArrow;
 
 var pinMainTop = Number(pinMain.style.top.substr(0, 3));
 var pinMainLeft = Number(pinMain.style.left.substr(0, 3));
 
-address.placeholder = (pinMainLeft + PIN_MAIN_HALF_SIZE) + ', '
-  + (pinMainTop + PIN_MAIN_HALF_SIZE);
+address.placeholder = (pinMainLeft + pinMainHalfSize) + ', '
+  + (pinMainTop + pinMainHalfSize);
 
 var toggleFieldsetsVisability = function (state) {
   fieldsets.forEach(function (fieldset) {
@@ -244,22 +245,65 @@ var removePins = function () {
   });
 };
 
-var toggleContentVisability = function () {
-  map.classList.toggle('map--faded');
-  form.classList.toggle('ad-form--disabled');
-};
-
 var onPinMainClick = function () {
-  toggleContentVisability();
-  address.value = (pinMainLeft + PIN_MAIN_HALF_SIZE) + ', '
-    + (pinMainTop + PIN_MAIN_SIZE + PIN_MAIN_ARROW);
-
+  map.classList.remove('map--faded');
+  form.classList.remove('ad-form--disabled');
   setDefaultValues();
   toggleFieldsetsVisability(false);
   renderPins();
+  pinMain.style.left = pinMain.offsetLeft + 'px';
+  pinMain.style.top = pinMain.offsetTop + 'px';
+  address.value = (pinMain.offsetLeft + pinMainHalfSize) + ', '
+    + (pinMain.offsetTop + pinMainAll);
+  document.removeEventListener('click', onPinMainClick);
 };
+pinMain.addEventListener('click', onPinMainClick);
 
-pinMain.addEventListener('mouseup', onPinMainClick);
+
+var onPinMainMouseDown = function (evt) {
+  evt.preventDefault();
+
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+
+  var onPinMainMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+
+    var minTop = 130 - (pinMainHalfSize + pinMainArrow);
+    var maxTop = 630 - (pinMainHalfSize + pinMainArrow);
+    var pinMinGridX = map.offsetLeft + pinMainHalfSize;
+    var pinMaxGridX = map.offsetLeft + map.clientWidth - pinMainHalfSize;
+
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
+    };
+    var pinStyleLeft = evt.clientX - shift.x;
+    var pinStyleTop = evt.clientY - shift.y;
+
+    if (pinStyleTop >= minTop &&
+        pinStyleTop <= maxTop &&
+        pinStyleLeft > pinMinGridX &&
+        pinStyleLeft < pinMaxGridX) {
+      pinMain.style.left = (pinStyleLeft - map.offsetLeft - pinMainHalfSize) + 'px';
+      pinMain.style.top = (pinStyleTop - pinMainHalfSize) + 'px';
+      address.value = (pinStyleLeft - map.offsetLeft) + ', '
+        + (pinStyleTop + pinMainHalfSize + pinMainArrow);
+    }
+  };
+
+  var onPinMainMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+
+    document.removeEventListener('mousemove', onPinMainMouseMove);
+    document.removeEventListener('mouseup', onPinMainMouseUp);
+  };
+  document.addEventListener('mousemove', onPinMainMouseMove);
+  document.addEventListener('mouseup', onPinMainMouseUp);
+};
+pinMain.addEventListener('mousedown', onPinMainMouseDown);
 
 // modeule4-task2
 var title = form.elements.title;
@@ -354,7 +398,8 @@ var resetForm = function () {
   form.reset();
 };
 var onResetClick = function () {
-  toggleContentVisability();
+  map.classList.add('map--faded');
+  form.classList.add('ad-form--disabled');
   toggleFieldsetsVisability(true);
   removePins();
   closeCard();
