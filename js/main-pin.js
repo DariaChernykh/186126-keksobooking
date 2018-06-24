@@ -22,7 +22,6 @@
   };
   pinMain.addEventListener('click', onPinMainClick);
 
-
   var onPinMainMouseDown = function (evt) {
     evt.preventDefault();
 
@@ -55,8 +54,7 @@
           pinMainHalfSize) + 'px';
         pinMain.style.top = (pinStyleTop - pinMainHalfSize) + 'px';
         window.form.address.value = (pinStyleLeft -
-          window.card.map.offsetLeft) + ', ' + (pinStyleTop + pinMainHalfSize +
-          pinMainArrow);
+          window.card.map.offsetLeft) + ', ' + (pinStyleTop + pinMainHalfSize + pinMainArrow);
       }
     };
 
