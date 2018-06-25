@@ -3,10 +3,9 @@
 (function () {
   var form = window.variables.form;
   var address = window.variables.address;
-  var mainPinHalfSize = window.controlMainPin.pinMainHalfSize;
-  var deactivateMap = window.controlMainPin.deactivateMap;
   var pinMain = window.variables.pinMain;
-  var maxPrice = window.variables.maxPrice;
+  var PIN_MAIN_HALF_SIZE = window.variables.PIN_MAIN_HALF_SIZE;
+  var MAX_PRICE = window.variables.MAX_PRICE;
 
   var submitBtn = form.querySelector('.ad-form__submit');
   var reset = document.querySelector('.ad-form__reset');
@@ -34,8 +33,8 @@
     '100': ['0']
   };
 
-  address.placeholder = (pinMainLeft + mainPinHalfSize) + ', '
-    + (pinMainTop + mainPinHalfSize);
+  address.placeholder = (pinMainLeft + PIN_MAIN_HALF_SIZE) + ', '
+    + (pinMainTop + PIN_MAIN_HALF_SIZE);
 
   var setPriceValues = function () {
     priceOptions.forEach(function (option, index) {
@@ -88,12 +87,11 @@
 
     price.required = true;
     price.type = 'number';
-    price.max = maxPrice;
+    price.max = MAX_PRICE;
 
     address.readOnly = true;
 
     setPriceValues();
-    setRoomValues();
   };
 
   setDefaultValues();
@@ -109,7 +107,7 @@
   };
 
   var onResetClick = function () {
-    deactivateMap();
+    window.map.deactivateMap();
     resetForm();
   };
   reset.addEventListener('click', onResetClick);

@@ -36,8 +36,8 @@
   };
 
   window.controlCard = {
-    closeCard: closeCard,
-    initCard: initCard
+    close: closeCard,
+    init: initCard
   };
 
 })();

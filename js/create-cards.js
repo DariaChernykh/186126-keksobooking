@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+
   var cardTemplate = window.variables.cardTemplate;
   var mapCard = cardTemplate.content.querySelector('.map__card');
 
@@ -63,10 +64,8 @@
     });
   };
 
-  createCards();
-
-  window.createCards = {
-    cards: createCards()
+  window.cards = {
+    create: createCards()
   };
 
 })();

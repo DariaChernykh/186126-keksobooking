@@ -23,10 +23,8 @@
     return pins;
   };
 
-  createPins();
-
-  window.createPins = {
-    pins: createPins()
+  window.pins = {
+    create: createPins()
   };
 
 })();

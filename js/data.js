@@ -25,7 +25,7 @@
   var MIN_Y = 130;
   var MAX_Y = 630;
   var MIN_PRICE = 1000;
-  var MAX_PRICE = window.variables.maxPrice;
+  var MAX_PRICE = window.variables.MAX_PRICE;
   var MIN_ROOMS = 1;
   var MAX_ROOMS = 5;
   var MIN_GUESTS = 1;
