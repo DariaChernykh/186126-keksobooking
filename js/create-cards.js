@@ -1,31 +1,14 @@
 'use strict';
 
 (function () {
-  var PIN_HALF_WIDTH = 20;
-  var PIN_HEIGHT = 40;
+  var cardTemplate = window.variables.cardTemplate;
+  var mapCard = cardTemplate.content.querySelector('.map__card');
+
   var IMAGE_WIDTH = 45;
   var IMAGE_HEIGHT = 40;
-  var cards = [];
-  var pins = [];
-  var cardTemplate = document.querySelector('template');
-  var mapCard = cardTemplate.content.querySelector('.map__card');
-  var mapPin = cardTemplate.content.querySelector('.map__pin');
-
-  var createPins = function () {
-    window.data.adverts.forEach(function (advert) {
-      var pin = mapPin.cloneNode(true);
-      pin.querySelector('img').src = advert.author.avatar;
-      pin.style.left
-        = (advert.location.x - PIN_HALF_WIDTH) + 'px';
-      pin.style.top
-        = (advert.location.y - PIN_HEIGHT) + 'px';
-      pin.tabIndex = '0';
-      pins.push(pin);
-    });
-    return pins;
-  };
 
   var createCards = function () {
+    var cards = [];
     window.data.adverts.forEach(function (advert) {
       var card = mapCard.cloneNode(true);
       card.querySelector('.popup__title').textContent
@@ -50,6 +33,7 @@
 
       cards.push(card);
     });
+    return cards;
   };
 
   var addFeatures = function (sortedFeatures, parent) {
@@ -79,11 +63,10 @@
     });
   };
 
-  createPins();
   createCards();
 
-  window.pinAndCard = {
-    pins: pins,
-    cards: cards
+  window.createCards = {
+    cards: createCards()
   };
+
 })();
