@@ -3,14 +3,17 @@
 (function () {
 
   var cardTemplate = window.variables.cardTemplate;
+  var adverts = window.data.adverts;
   var mapPin = cardTemplate.content.querySelector('.map__pin');
+
+console.log(adverts);
 
   var PIN_HALF_WIDTH = 20;
   var PIN_HEIGHT = 40;
 
   var createPins = function () {
     var pins = [];
-    window.data.adverts.forEach(function (advert) {
+    adverts.forEach(function (advert) {
       var pin = mapPin.cloneNode(true);
       pin.querySelector('img').src = advert.author.avatar;
       pin.style.left
@@ -22,7 +25,7 @@
     });
     return pins;
   };
-
+  // console.log(createPins());
   window.pins = {
     create: createPins()
   };
