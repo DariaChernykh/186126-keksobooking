@@ -1,12 +1,25 @@
 'use strict';
 
 (function () {
-
   var cardTemplate = window.variables.cardTemplate;
   var mapCard = cardTemplate.content.querySelector('.map__card');
 
   var IMAGE_WIDTH = 45;
   var IMAGE_HEIGHT = 40;
+
+  var successHandler = function (array) {
+    window.data = {'adverts': array};
+    window.cards = createCards();
+    window.pins = window.create.pins();
+    window.controlPins.render();
+    window.controlPins.remove();
+  };
+
+  var errorHandler = function (response) {
+    console.log(response);
+  };
+
+  window.backend.load(successHandler, errorHandler);
 
   var createCards = function () {
     var cards = [];
@@ -63,9 +76,4 @@
       }
     });
   };
-
-  window.cards = {
-    create: createCards()
-  };
-
 })();

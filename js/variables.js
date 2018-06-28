@@ -7,9 +7,9 @@
   var pinMain = document.querySelector('.map__pin--main');
   var form = document.querySelector('.ad-form');
   var address = document.getElementById('address');
-  var MAX_PRICE = 1000000;
   var PIN_MAIN_SIZE = 62;
   var PIN_MAIN_HALF_SIZE = PIN_MAIN_SIZE / 2;
+  var ESC_CODE = 27;
 
   window.variables = {
     map: map,
@@ -17,9 +17,9 @@
     pinMain: pinMain,
     form: form,
     address: address,
-    MAX_PRICE: MAX_PRICE,
     PIN_MAIN_SIZE: PIN_MAIN_SIZE,
     PIN_MAIN_HALF_SIZE: PIN_MAIN_HALF_SIZE,
+    ESC_CODE: ESC_CODE,
   };
 
 })();

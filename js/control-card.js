@@ -3,8 +3,8 @@
 (function () {
 
   var map = window.variables.map;
+  var ESC_CODE = window.variables.ESC_CODE;
 
-  var ESC_CODE = 27;
   var ENTER_CODE = 13;
 
   var closeCard = function () {

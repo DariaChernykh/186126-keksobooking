@@ -9,7 +9,8 @@
   var PIN_HALF_WIDTH = 20;
   var PIN_HEIGHT = 40;
 
-  var createPins = function () {
+  var createPins = function (callback) {
+    callback();
     var pins = [];
     adverts.forEach(function (advert) {
       var pin = mapPin.cloneNode(true);
@@ -26,34 +27,6 @@
     };
   };
 
-  var successHandler = function (array) {
-    for (var i = 0; i < array.length; i++) {
-      var advert = {
-        'author': {
-          'avatar': array[i].author.avatar,
-        },
-        'offer': {
-          'title': array[i].offer.title,
-          'address': array[i].offer.address,
-          'price': array[i].offer.price,
-          'type': array[i].offer.type,
-          'rooms': array[i].offer.rooms,
-          'guests': array[i].offer.guests,
-          'checkin': array[i].offer.checkin,
-          'checkout': array[i].offer.checkout,
-          'features': array[i].offer.features,
-          'description': array[i].offer.description,
-          'photos': array[i].offer.photos
-        },
-        'location': {
-          'x': array[i].location.x,
-          'y': array[i].location.y
-        }
-      };
-      window.data.adverts.push(advert);
-    }
-    createPins();
-  };
 
     // var adverts = [];
     // for (var i = 1; i <= NUMBERS_OF_ADVERTS; i++) {
@@ -87,13 +60,6 @@
     // return adverts;
   //
   // };
-
-  var errorHandler = function () {
-
-  };
-
-  window.load(successHandler, errorHandler);
-
   // var titleChoices = ['Большая уютная квартира', 'Маленькая неуютная квартира',
   //   'Огромный прекрасный дворец', 'Маленький ужасный дворец',
   //   'Красивый гостевой домик', 'Некрасивый негостеприимный домик',
