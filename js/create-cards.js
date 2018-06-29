@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+
   var cardTemplate = window.variables.cardTemplate;
   var mapCard = cardTemplate.content.querySelector('.map__card');
 
@@ -8,15 +9,22 @@
   var IMAGE_HEIGHT = 40;
 
   var successHandler = function (array) {
-    window.data = {'adverts': array};
-    window.cards = createCards();
-    window.pins = window.create.pins();
-    window.controlPins.render();
-    window.controlPins.remove();
+    window.data = {
+      adverts: array};
+    generateContent();
   };
 
-  var errorHandler = function (response) {
-    console.log(response);
+  var errorHandler = function () {
+    // не понимаю как их использовать
+  };
+
+  var generateContent = function () {
+    window.data = {
+      cards: createCards(),
+      pins: window.create.pins(),
+    };
+    window.controlPins.render();
+    window.controlPins.remove();
   };
 
   window.backend.load(successHandler, errorHandler);
@@ -76,4 +84,5 @@
       }
     });
   };
+
 })();

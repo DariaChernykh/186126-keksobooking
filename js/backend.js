@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+
   var URL = 'https://js.dump.academy/keksobooking/data';
   var UPLOAD_URL = 'https://js.dump.academy/keksobooking';
 
@@ -53,4 +54,5 @@
     load: load,
     upload: upload
   };
+
 })();

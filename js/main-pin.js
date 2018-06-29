@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+
   var address = window.variables.address;
   var pinMain = window.variables.pinMain;
   var map = window.variables.map;

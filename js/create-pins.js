@@ -25,4 +25,5 @@
   window.create = {
     pins: createPins
   };
+
 })();

@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+
   var form = window.variables.form;
   var address = window.variables.address;
   var pinMain = window.variables.pinMain;
@@ -10,6 +11,7 @@
   var submitBtn = form.querySelector('.ad-form__submit');
   var reset = document.querySelector('.ad-form__reset');
   var success = document.querySelector('.success');
+  var error = document.querySelector('.error');
 
   var title = form.elements.title;
   var price = form.elements.price;
@@ -131,27 +133,8 @@
     }
   };
 
-  // var onSubmitBtnClick = function () {
-  //   var inputs = form.querySelectorAll('input:required');
-  //   inputs.forEach(function (input) {
-  //     if (!input.validity.valid) {
-  //       input.classList.add('invalid');
-  //     } else {
-  //       input.classList.remove('invalid');
-  //     }
-  //   });
-  // };
-  // submitBtn.addEventListener('click', onSubmitBtnClick);
-  var successHandler = function () {
-    window.map.deactivateMap();
-    resetForm();
-    success.classList.remove('hidden');
-
-    success.addEventListener('click', onSuccessClick);
-    document.addEventListener('keydown', onSuccessKeydown);
-  };
-
-  var errorHandler = function () {
+  var checkForm = function () {
+    error.classList.remove('hidden');
     var inputs = form.querySelectorAll('input:required');
     inputs.forEach(function (input) {
       if (!input.validity.valid) {
@@ -162,9 +145,45 @@
     });
   };
 
+  var closeError = function () {
+    error.classList.add('hidden');
+
+    error.removeEventListener('click', onErrorClick);
+    document.removeEventListener('keydown', onErrorKeydown);
+  };
+
+  var onErrorClick = function () {
+    closeError();
+  };
+
+  var onErrorKeydown = function (evt) {
+    if (evt.keyCode === ESC_CODE) {
+      closeError();
+    }
+  };
+
+  var successHandler = function () {
+    window.map.deactivateMap();
+    resetForm();
+    success.classList.remove('hidden');
+
+    success.addEventListener('click', onSuccessClick);
+    document.addEventListener('keydown', onSuccessKeydown);
+  };
+
+  var errorHandler = function () {
+    // не понимаю как их использовать
+  };
+
   var onSubmitBtnClick = function (evt) {
-    window.backend.upload(new FormData(form), successHandler, errorHandler);
     evt.preventDefault();
+    if (form.checkValidity()) {
+      window.backend.upload(new FormData(form), successHandler, errorHandler);
+    } else {
+      checkForm();
+      error.addEventListener('click', onErrorClick);
+      document.addEventListener('keydown', onErrorKeydown);
+    }
   };
 
   submitBtn.addEventListener('click', onSubmitBtnClick);
