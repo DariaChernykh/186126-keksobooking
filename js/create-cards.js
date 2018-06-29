@@ -10,12 +10,14 @@
 
   var successHandler = function (array) {
     window.data = {
-      adverts: array};
+      adverts: array
+    };
     generateContent();
   };
-
-  var errorHandler = function () {
-    // не понимаю как их использовать
+  var errorHandler = function (response) {
+    if (confirm(response + '. Повторить запрос ?')) {
+      window.backend.load(successHandler, errorHandler);
+    }
   };
 
   var generateContent = function () {
@@ -31,6 +33,7 @@
 
   var createCards = function () {
     var cards = [];
+
     window.data.adverts.forEach(function (advert) {
       var card = mapCard.cloneNode(true);
       card.querySelector('.popup__title').textContent

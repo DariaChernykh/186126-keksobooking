@@ -171,8 +171,8 @@
     document.addEventListener('keydown', onSuccessKeydown);
   };
 
-  var errorHandler = function () {
-    // не понимаю как их использовать
+  var errorHandler = function (response) {
+    alert(response);
   };
 
   var onSubmitBtnClick = function (evt) {

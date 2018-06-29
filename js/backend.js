@@ -43,7 +43,7 @@
     });
 
     xhr.addEventListener('error', function () {
-      onError('Данные заполненв неверно');
+      onError('Не удалось загрузить данные на сервер. Проверьте соединение с интернетом.');
     });
 
     xhr.open('POST', UPLOAD_URL);
