@@ -8,19 +8,18 @@
   var activateMap = function () {
     map.classList.remove('map--faded');
     form.classList.remove('ad-form--disabled');
-    window.controlPins.render();
   };
 
   var deactivateMap = function () {
     map.classList.add('map--faded');
     form.classList.add('ad-form--disabled');
-    window.controlPins.remove();
+    window.controlPins.remove(window.array.pins);
     window.controlCard.close();
   };
 
   window.map = {
-    activateMap: activateMap,
-    deactivateMap: deactivateMap
+    activate: activateMap,
+    deactivate: deactivateMap
   };
 
 })();

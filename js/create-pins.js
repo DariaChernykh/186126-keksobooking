@@ -7,9 +7,9 @@
   var PIN_HALF_WIDTH = 20;
   var PIN_HEIGHT = 40;
 
-  var createPins = function () {
+  var createPins = function (array) {
     var pins = [];
-    window.data.adverts.forEach(function (advert) {
+    array.forEach(function (advert) {
       var pin = mapPin.cloneNode(true);
       pin.querySelector('img').src = advert.author.avatar;
       pin.style.left
@@ -22,8 +22,6 @@
     return pins;
   };
 
-  window.create = {
-    pins: createPins
-  };
+  window.createPins = createPins;
 
 })();

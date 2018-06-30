@@ -7,11 +7,13 @@
   var pinMain = window.variables.pinMain;
   var PIN_MAIN_HALF_SIZE = window.variables.PIN_MAIN_HALF_SIZE;
   var ESC_CODE = window.variables.ESC_CODE;
+  var error = window.variables.error;
+  var errorMessage = window.variables.errorMessage;
+  var TIME_TO_CLOSE = window.variables.TIME_TO_CLOSE;
 
   var submitBtn = form.querySelector('.ad-form__submit');
   var reset = document.querySelector('.ad-form__reset');
   var success = document.querySelector('.success');
-  var error = document.querySelector('.error');
 
   var title = form.elements.title;
   var price = form.elements.price;
@@ -111,7 +113,7 @@
   };
 
   var onResetClick = function () {
-    window.map.deactivateMap();
+    window.map.deactivate();
     resetForm();
   };
   reset.addEventListener('click', onResetClick);
@@ -135,6 +137,7 @@
 
   var checkForm = function () {
     error.classList.remove('hidden');
+    errorMessage.textContent = 'Некоторые поля заполнены не верно!';
     var inputs = form.querySelectorAll('input:required');
     inputs.forEach(function (input) {
       if (!input.validity.valid) {
@@ -163,7 +166,7 @@
   };
 
   var successHandler = function () {
-    window.map.deactivateMap();
+    window.map.deactivate();
     resetForm();
     success.classList.remove('hidden');
 
@@ -172,7 +175,10 @@
   };
 
   var errorHandler = function (response) {
-    alert(response);
+    error.classList.remove('hidden');
+    errorMessage.textContent = response;
+
+    setTimeout(closeError, TIME_TO_CLOSE);
   };
 
   var onSubmitBtnClick = function (evt) {

@@ -7,11 +7,36 @@
   var map = window.variables.map;
   var PIN_MAIN_SIZE = window.variables.PIN_MAIN_SIZE;
   var PIN_MAIN_HALF_SIZE = window.variables.PIN_MAIN_HALF_SIZE;
+  var TIME_TO_CLOSE = window.variables.TIME_TO_CLOSE;
+  var error = window.variables.error;
+  var errorMessage = window.variables.errorMessage;
 
   var PIN_MAIN_ARROW = 22;
   var PIN_MAIN_ALL = PIN_MAIN_SIZE + PIN_MAIN_ARROW;
   var MIN_TOP = 130;
   var MAX_TOP = 630;
+  window.array = {
+    cards: [],
+    pins: []
+  };
+
+  var successHandler = function (array) {
+    window.array.cards = window.createCards(array);
+    window.array.pins = window.createPins(array);
+    window.controlPins.render(window.array.pins);
+  };
+
+  var errorHandler = function (response) {
+    error.classList.remove('hidden');
+    errorMessage.textContent = response;
+
+    setTimeout(closeError, TIME_TO_CLOSE);
+  };
+
+  var closeError = function () {
+    error.classList.add('hidden');
+  };
+
 
   var onPinMainClick = function () {
     pinMain.style.left = pinMain.offsetLeft + 'px';
@@ -19,7 +44,8 @@
     address.value = (pinMain.offsetLeft + PIN_MAIN_HALF_SIZE) + ', '
       + (pinMain.offsetTop + PIN_MAIN_ALL);
 
-    window.map.activateMap();
+    window.map.activate();
+    window.backend.load(successHandler, errorHandler);
     document.removeEventListener('mousedown', onPinMainClick);
   };
   pinMain.addEventListener('mousedown', onPinMainClick);

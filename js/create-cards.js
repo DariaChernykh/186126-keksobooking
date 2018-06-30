@@ -7,34 +7,17 @@
 
   var IMAGE_WIDTH = 45;
   var IMAGE_HEIGHT = 40;
-
-  var successHandler = function (array) {
-    window.data = {
-      adverts: array
-    };
-    generateContent();
-  };
-  var errorHandler = function (response) {
-    if (confirm(response + '. Повторить запрос ?')) {
-      window.backend.load(successHandler, errorHandler);
-    }
+  var TRANSLATE_TYPE = {
+    'palace': 'Дворец',
+    'flat': 'Квартира',
+    'house': 'Дом',
+    'bungalo': 'Бунгало'
   };
 
-  var generateContent = function () {
-    window.data = {
-      cards: createCards(),
-      pins: window.create.pins(),
-    };
-    window.controlPins.render();
-    window.controlPins.remove();
-  };
-
-  window.backend.load(successHandler, errorHandler);
-
-  var createCards = function () {
+  var createCards = function (array) {
     var cards = [];
 
-    window.data.adverts.forEach(function (advert) {
+    array.forEach(function (advert) {
       var card = mapCard.cloneNode(true);
       card.querySelector('.popup__title').textContent
         = advert.offer.title;
@@ -42,7 +25,7 @@
         = advert.offer.address;
       card.querySelector('.popup__text--price').textContent =
         advert.offer.price + ' ₽/ночь';
-      card.querySelector('.popup__type').textContent = advert.offer.type;
+      card.querySelector('.popup__type').textContent = TRANSLATE_TYPE[advert.offer.type];
       card.querySelector('.popup__text--capacity').textContent
         = advert.offer.rooms + ' комнаты для ' + advert.offer.guests +
         ' гостей';
@@ -87,5 +70,7 @@
       }
     });
   };
+
+  window.createCards = createCards;
 
 })();

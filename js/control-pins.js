@@ -11,19 +11,19 @@
       popup.remove();
     }
 
-    map.insertBefore(window.data.cards[index], mapFiltersContainer);
+    map.insertBefore(window.array.cards[index], mapFiltersContainer);
     window.controlCard.init();
   };
 
-  var renderPins = function () {
-    window.data.pins.forEach(function (pin, index) {
+  var renderPins = function (array) {
+    array.forEach(function (pin, index) {
       map.appendChild(pin);
       pin.addEventListener('click', onPinClick.bind(null, index));
     });
   };
 
-  var removePins = function () {
-    window.data.pins.forEach(function (pin) {
+  var removePins = function (array) {
+    array.forEach(function (pin) {
       map.removeChild(pin);
     });
   };
