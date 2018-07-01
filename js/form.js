@@ -1,14 +1,16 @@
 'use strict';
 
 (function () {
+
   var form = window.variables.form;
   var address = window.variables.address;
   var pinMain = window.variables.pinMain;
   var PIN_MAIN_HALF_SIZE = window.variables.PIN_MAIN_HALF_SIZE;
-  var MAX_PRICE = window.variables.MAX_PRICE;
+  var ESC_CODE = window.variables.ESC_CODE;
 
   var submitBtn = form.querySelector('.ad-form__submit');
   var reset = document.querySelector('.ad-form__reset');
+  var success = document.querySelector('.success');
 
   var title = form.elements.title;
   var price = form.elements.price;
@@ -23,6 +25,7 @@
   var pinMainTop = Number(pinMain.style.top.substr(0, 3));
   var pinMainLeft = Number(pinMain.style.left.substr(0, 3));
 
+  var MAX_PRICE = 1000000;
   var MIN_LENGTH = 30;
   var MAX_LENGTH = 100;
   var MIN_PRICES = [0, 1000, 5000, 10000];
@@ -107,12 +110,29 @@
   };
 
   var onResetClick = function () {
-    window.map.deactivateMap();
+    window.map.deactivate();
     resetForm();
   };
   reset.addEventListener('click', onResetClick);
 
-  var onSubmitBtnClick = function () {
+  var closeSuccess = function () {
+    success.classList.add('hidden');
+
+    success.removeEventListener('click', onSuccessClick);
+    document.removeEventListener('keydown', onSuccessKeydown);
+  };
+
+  var onSuccessClick = function () {
+    closeSuccess();
+  };
+
+  var onSuccessKeydown = function (evt) {
+    if (evt.keyCode === ESC_CODE) {
+      closeSuccess();
+    }
+  };
+
+  var checkForm = function () {
     var inputs = form.querySelectorAll('input:required');
     inputs.forEach(function (input) {
       if (!input.validity.valid) {
@@ -122,6 +142,29 @@
       }
     });
   };
+
+  var successHandler = function () {
+    window.map.deactivate();
+    resetForm();
+    success.classList.remove('hidden');
+
+    success.addEventListener('click', onSuccessClick);
+    document.addEventListener('keydown', onSuccessKeydown);
+  };
+
+  var errorHandler = function (response) {
+    window.showPopup(response);
+  };
+
+  var onSubmitBtnClick = function (evt) {
+    evt.preventDefault();
+    if (form.checkValidity()) {
+      window.backend.upload(new FormData(form), successHandler, errorHandler);
+    } else {
+      checkForm();
+    }
+  };
+
   submitBtn.addEventListener('click', onSubmitBtnClick);
 
 })();

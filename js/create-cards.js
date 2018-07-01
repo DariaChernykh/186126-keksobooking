@@ -7,10 +7,18 @@
 
   var IMAGE_WIDTH = 45;
   var IMAGE_HEIGHT = 40;
+  var TRANSLATE_TYPE = {
+    'palace': 'Дворец',
+    'flat': 'Квартира',
+    'house': 'Дом',
+    'bungalo': 'Бунгало'
+  };
 
-  var createCards = function () {
-    var cards = [];
-    window.data.adverts.forEach(function (advert) {
+  var cards = [];
+
+  var createCards = function (array) {
+
+    array.forEach(function (advert) {
       var card = mapCard.cloneNode(true);
       card.querySelector('.popup__title').textContent
         = advert.offer.title;
@@ -18,7 +26,7 @@
         = advert.offer.address;
       card.querySelector('.popup__text--price').textContent =
         advert.offer.price + ' ₽/ночь';
-      card.querySelector('.popup__type').textContent = advert.offer.type;
+      card.querySelector('.popup__type').textContent = TRANSLATE_TYPE[advert.offer.type];
       card.querySelector('.popup__text--capacity').textContent
         = advert.offer.rooms + ' комнаты для ' + advert.offer.guests +
         ' гостей';
@@ -34,7 +42,6 @@
 
       cards.push(card);
     });
-    return cards;
   };
 
   var addFeatures = function (sortedFeatures, parent) {
@@ -63,9 +70,13 @@
       }
     });
   };
+  var getCardByIndex = function (index) {
+    return cards[index];
+  };
 
   window.cards = {
-    create: createCards()
+    create: createCards,
+    get: getCardByIndex
   };
 
 })();

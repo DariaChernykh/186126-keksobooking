@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+
   var address = window.variables.address;
   var pinMain = window.variables.pinMain;
   var map = window.variables.map;
@@ -12,13 +13,26 @@
   var MIN_TOP = 130;
   var MAX_TOP = 630;
 
+
+  var successHandler = function (array) {
+    window.map.activate();
+    window.cards.create(array);
+    window.controlPins.render(array);
+
+  };
+
+  var errorHandler = function (response) {
+    window.showPopup(response);
+  };
+
+
   var onPinMainClick = function () {
     pinMain.style.left = pinMain.offsetLeft + 'px';
     pinMain.style.top = pinMain.offsetTop + 'px';
     address.value = (pinMain.offsetLeft + PIN_MAIN_HALF_SIZE) + ', '
       + (pinMain.offsetTop + PIN_MAIN_ALL);
 
-    window.map.activateMap();
+    window.backend.load(successHandler, errorHandler);
     document.removeEventListener('mousedown', onPinMainClick);
   };
   pinMain.addEventListener('mousedown', onPinMainClick);
