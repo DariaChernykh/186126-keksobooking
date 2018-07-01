@@ -14,8 +14,9 @@
     'bungalo': 'Бунгало'
   };
 
+  var cards = [];
+
   var createCards = function (array) {
-    var cards = [];
 
     array.forEach(function (advert) {
       var card = mapCard.cloneNode(true);
@@ -71,6 +72,9 @@
     });
   };
 
-  window.createCards = createCards;
+  window.cards = {
+    create: createCards,
+    get: cards,
+  };
 
 })();

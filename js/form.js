@@ -7,9 +7,6 @@
   var pinMain = window.variables.pinMain;
   var PIN_MAIN_HALF_SIZE = window.variables.PIN_MAIN_HALF_SIZE;
   var ESC_CODE = window.variables.ESC_CODE;
-  var error = window.variables.error;
-  var errorMessage = window.variables.errorMessage;
-  var TIME_TO_CLOSE = window.variables.TIME_TO_CLOSE;
 
   var submitBtn = form.querySelector('.ad-form__submit');
   var reset = document.querySelector('.ad-form__reset');
@@ -136,8 +133,6 @@
   };
 
   var checkForm = function () {
-    error.classList.remove('hidden');
-    errorMessage.textContent = 'Некоторые поля заполнены не верно!';
     var inputs = form.querySelectorAll('input:required');
     inputs.forEach(function (input) {
       if (!input.validity.valid) {
@@ -146,23 +141,6 @@
         input.classList.remove('invalid');
       }
     });
-  };
-
-  var closeError = function () {
-    error.classList.add('hidden');
-
-    error.removeEventListener('click', onErrorClick);
-    document.removeEventListener('keydown', onErrorKeydown);
-  };
-
-  var onErrorClick = function () {
-    closeError();
-  };
-
-  var onErrorKeydown = function (evt) {
-    if (evt.keyCode === ESC_CODE) {
-      closeError();
-    }
   };
 
   var successHandler = function () {
@@ -175,10 +153,7 @@
   };
 
   var errorHandler = function (response) {
-    error.classList.remove('hidden');
-    errorMessage.textContent = response;
-
-    setTimeout(closeError, TIME_TO_CLOSE);
+    window.showPopup(response);
   };
 
   var onSubmitBtnClick = function (evt) {
@@ -187,8 +162,6 @@
       window.backend.upload(new FormData(form), successHandler, errorHandler);
     } else {
       checkForm();
-      error.addEventListener('click', onErrorClick);
-      document.addEventListener('keydown', onErrorKeydown);
     }
   };
 

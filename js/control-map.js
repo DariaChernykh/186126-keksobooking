@@ -13,7 +13,7 @@
   var deactivateMap = function () {
     map.classList.add('map--faded');
     form.classList.add('ad-form--disabled');
-    window.controlPins.remove(window.array.pins);
+    window.controlPins.remove();
     window.controlCard.close();
   };
 
