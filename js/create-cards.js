@@ -42,7 +42,6 @@
 
       cards.push(card);
     });
-    return cards;
   };
 
   var addFeatures = function (sortedFeatures, parent) {
@@ -71,10 +70,13 @@
       }
     });
   };
+  var getCardByIndex = function (index) {
+    return cards[index];
+  };
 
   window.cards = {
     create: createCards,
-    get: cards,
+    get: getCardByIndex
   };
 
 })();

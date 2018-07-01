@@ -12,7 +12,7 @@
       popup.remove();
     }
 
-    map.insertBefore(window.cards.get[index], mapFiltersContainer);
+    map.insertBefore(window.cards.get(index), mapFiltersContainer);
     window.controlCard.init();
   };
 
