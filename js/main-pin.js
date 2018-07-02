@@ -13,12 +13,12 @@
   var MIN_TOP = 130;
   var MAX_TOP = 630;
 
-
+  window.adverts = [];
   var successHandler = function (array) {
+    window.adverts = array;
     window.map.activate();
-    window.cards.create(array);
-    window.controlPins.render(array);
-
+    window.cards.create(window.adverts.slice(0, 5));
+    window.controlPins.render(window.adverts.slice(0, 5));
   };
 
   var errorHandler = function (response) {
