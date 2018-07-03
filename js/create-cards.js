@@ -74,9 +74,16 @@
     return cards[index];
   };
 
+  var removeCards = function () {
+    if (cards.length > 0) {
+      cards = [];
+    }
+  };
+
   window.cards = {
     create: createCards,
-    get: getCardByIndex
+    get: getCardByIndex,
+    remove: removeCards
   };
 
 })();

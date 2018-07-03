@@ -24,7 +24,7 @@
 
   var copyAdverts = [];
 
-  var selectType = function (advert) {
+  var checkType = function (advert) {
     if (housingType.value === 'any') {
       return true;
     } else {
@@ -32,7 +32,7 @@
     }
   };
 
-  var selectPrice = function (advert) {
+  var checkPrice = function (advert) {
     switch (housingPrice.value) {
       case 'low':
         return advert.offer.price <= PRICE_RANGES.low.max;
@@ -46,7 +46,7 @@
     }
   };
 
-  var selectRoom = function (advert) {
+  var checkRoom = function (advert) {
     if (housingRooms.value === 'any') {
       return true;
     } else {
@@ -54,7 +54,7 @@
     }
   };
 
-  var selectGuests = function (advert) {
+  var checkGuests = function (advert) {
     if (housingGuests.value === 'any') {
       return true;
     } else {
@@ -62,7 +62,7 @@
     }
   };
 
-  var selectFeature = function (advert) {
+  var checkFeature = function (advert) {
     for (var i = 0; i < housingFeatures.length; i++) {
       if (housingFeatures[i].checked && advert.offer.features.indexOf(housingFeatures[i].value) < 0) {
         return false;
@@ -74,12 +74,14 @@
   var onFormChange = function () {
     copyAdverts = window.adverts.slice();
     var filteredArray = copyAdverts.filter(function (advert) {
-      return selectType(advert) && selectPrice(advert) &&
-        selectRoom(advert) && selectGuests(advert) && selectFeature(advert);
+      return checkType(advert) && checkPrice(advert) &&
+        checkRoom(advert) && checkGuests(advert) && checkFeature(advert);
     }).slice(0, 5);
 
     window.controlCard.close();
     window.controlPins.remove();
+    window.cards.remove();
+    window.cards.create(filteredArray);
     window.controlPins.render(filteredArray);
   };
 

@@ -2,12 +2,12 @@
 
 (function () {
 
-  var DEBOUNCE_INTERVAL = 500; // ms
+  var DEBOUNCE_INTERVAL = 500;
 
   window.debounce = function (fun) {
     var lastTimeout = null;
 
-    return function  () {
+    return function () {
       var args = arguments;
       if (lastTimeout) {
         window.clearTimeout(lastTimeout);
