@@ -3,31 +3,86 @@
 (function () {
 
   var filter = document.querySelector('.map__filters');
-  var type = document.getElementById('housing-type');
-  var price = document.getElementById('housing-price');
-  var rooms = document.getElementById('housing-rooms');
-  var guests = document.getElementById('housing-guests');
-  var features = document.getElementById('housing-features');
+  var housingType = document.getElementById('housing-type');
+  var housingPrice = document.getElementById('housing-price');
+  var housingRooms = document.getElementById('housing-rooms');
+  var housingGuests = document.getElementById('housing-guests');
+  var housingFeatures = Array.from(document.querySelectorAll('.map__checkbox'));
+
+  var PRICE_RANGES = {
+    low: {
+      max: 10000,
+    },
+    middle: {
+      min: 10000,
+      max: 50000,
+    },
+    high: {
+      min: 50000,
+    },
+  };
 
   var copyAdverts = [];
 
+  var selectType = function (advert) {
+    if (housingType.value === 'any') {
+      return true;
+    } else {
+      return advert.offer.type === housingType.value;
+    }
+  };
+
+  var selectPrice = function (advert) {
+    switch (housingPrice.value) {
+      case 'low':
+        return advert.offer.price <= PRICE_RANGES.low.max;
+      case 'middle':
+        return advert.offer.price >= PRICE_RANGES.middle.min &&
+          advert.offer.price <= PRICE_RANGES.middle.max;
+      case 'high':
+        return advert.offer.price >= PRICE_RANGES.high.min;
+      default:
+        return true;
+    }
+  };
+
+  var selectRoom = function (advert) {
+    if (housingRooms.value === 'any') {
+      return true;
+    } else {
+      return advert.offer.rooms === Number(housingRooms.value);
+    }
+  };
+
+  var selectGuests = function (advert) {
+    if (housingGuests.value === 'any') {
+      return true;
+    } else {
+      return advert.offer.guests === Number(housingGuests.value);
+    }
+  };
+
+  var selectFeature = function (advert) {
+    for (var i = 0; i < housingFeatures.length; i++) {
+      if (housingFeatures[i].checked && advert.offer.features.indexOf(housingFeatures[i].value) < 0) {
+        return false;
+      }
+    }
+    return true;
+  };
+
   var onFormChange = function () {
-
-
     copyAdverts = window.adverts.slice();
-    console.log (copyAdverts);
-    var filteredArray = copyAdverts.filter(function (item) {
-      var selectedType = item.offer.type === type.value;
-      var selectedRooms = item.offer.rooms === Number(rooms.value);
-      return selectedType || selectedRooms;
-    });
-    console.log (filteredArray);
+    var filteredArray = copyAdverts.filter(function (advert) {
+      return selectType(advert) && selectPrice(advert) &&
+        selectRoom(advert) && selectGuests(advert) && selectFeature(advert);
+    }).slice(0, 5);
+
+    window.controlCard.close();
+    window.controlPins.remove();
+    window.controlPins.render(filteredArray);
   };
 
-  filter.addEventListener('change', onFormChange);
-  var filteredAdverts = copyAdverts;
-  var updatePins = function () {
-
-  };
+  filter.addEventListener('change', window.debounce(onFormChange));
 
 })();

@@ -14,6 +14,7 @@
   var MAX_TOP = 630;
 
   window.adverts = [];
+
   var successHandler = function (array) {
     window.adverts = array;
     window.map.activate();
