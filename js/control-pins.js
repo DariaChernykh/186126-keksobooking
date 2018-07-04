@@ -3,7 +3,9 @@
 (function () {
 
   var map = window.variables.map;
+
   var mapFiltersContainer = document.querySelector('.map__filters-container');
+
   var pins = [];
 
   var onPinClick = function (index) {

@@ -3,7 +3,9 @@
 (function () {
 
   var cardTemplate = window.variables.cardTemplate;
+
   var mapPin = cardTemplate.content.querySelector('.map__pin');
+
   var PIN_HALF_WIDTH = 20;
   var PIN_HEIGHT = 40;
 

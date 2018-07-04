@@ -7,9 +7,11 @@
   var pinMain = document.querySelector('.map__pin--main');
   var form = document.querySelector('.ad-form');
   var address = document.getElementById('address');
+  var filter = document.querySelector('.map__filters');
   var PIN_MAIN_SIZE = 62;
   var PIN_MAIN_HALF_SIZE = PIN_MAIN_SIZE / 2;
   var ESC_CODE = 27;
+  var MAX_PINS_QUANTITY = 5;
 
   window.variables = {
     map: map,
@@ -20,6 +22,8 @@
     PIN_MAIN_SIZE: PIN_MAIN_SIZE,
     PIN_MAIN_HALF_SIZE: PIN_MAIN_HALF_SIZE,
     ESC_CODE: ESC_CODE,
+    filter: filter,
+    MAX_PINS_QUANTITY: MAX_PINS_QUANTITY
   };
 
 })();
