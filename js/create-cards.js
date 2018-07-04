@@ -41,7 +41,7 @@
       addPhotos(advert.offer.photos, card);
 
       cards.push(card);
-    }); console.log(cards);
+    });
   };
 
   var addFeatures = function (sortedFeatures, parent) {
