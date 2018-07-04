@@ -18,6 +18,7 @@
   var successHandler = function (array) {
     window.adverts = array;
     window.map.activate();
+    window.cards.remove();
     window.cards.create(window.adverts.slice(0, 5));
     window.controlPins.render(window.adverts.slice(0, 5));
   };
