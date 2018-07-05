@@ -109,14 +109,9 @@
     form.reset();
   };
 
-  var resetElements = function () {
-    window.map.deactivate();
-    window.mainPin.reset();
-    resetForm();
-  };
-
   var onResetClick = function () {
-    resetElements();
+    window.main.restore();
+    resetForm();
   };
   reset.addEventListener('click', onResetClick);
 
@@ -149,7 +144,8 @@
   };
 
   var successHandler = function () {
-    resetElements();
+    window.main.restore();
+    resetForm();
     success.classList.remove('hidden');
 
     success.addEventListener('click', onSuccessClick);
