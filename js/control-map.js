@@ -2,23 +2,30 @@
 
 (function () {
 
-  var form = window.variables.form;
+  var filter = window.variables.filter;
   var map = window.variables.map;
+  var form = window.variables.form;
 
   var isActive = false;
 
-  var activateMap = function () {
+  var activateMap = function (callback) {
     isActive = true;
     map.classList.remove('map--faded');
     form.classList.remove('ad-form--disabled');
+
+    filter.addEventListener('change', window.debounce(callback));
+    window.form.addListeners();
   };
 
   var deactivateMap = function () {
     isActive = false;
     map.classList.add('map--faded');
     form.classList.add('ad-form--disabled');
-    window.controlPins.remove();
-    window.controlCard.close();
+    window.pins.remove();
+    window.cards.close();
+
+    filter.removeEventListener('change', window.debounce);
+    window.form.removeListeners();
   };
 
   var isMapActive = function () {

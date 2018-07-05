@@ -8,8 +8,8 @@
   var PIN_MAIN_HALF_SIZE = window.variables.PIN_MAIN_HALF_SIZE;
   var ESC_CODE = window.variables.ESC_CODE;
 
-  var submitBtn = form.querySelector('.ad-form__submit');
-  var reset = document.querySelector('.ad-form__reset');
+  var submitButton = form.querySelector('.ad-form__submit');
+  var resetButton = form.querySelector('.ad-form__reset');
   var success = document.querySelector('.success');
 
   var title = form.elements.title;
@@ -51,17 +51,14 @@
   var onSelectTypeChange = function () {
     setPriceValues();
   };
-  selectType.addEventListener('change', onSelectTypeChange);
 
   var onOptionTimeInChange = function (evt) {
     selectTimeOut.selectedIndex = evt.target.selectedIndex;
   };
-  selectTimeIn.addEventListener('change', onOptionTimeInChange);
 
   var onOptionTimeOutChange = function (evt) {
     selectTimeIn.selectedIndex = evt.target.selectedIndex;
   };
-  selectTimeOut.addEventListener('change', onOptionTimeOutChange);
 
   var setRoomValues = function () {
     var room = roomFieldset.options[roomFieldset.selectedIndex].value;
@@ -80,7 +77,6 @@
   var onRoomFieldsetChange = function () {
     setRoomValues();
   };
-  roomFieldset.addEventListener('change', onRoomFieldsetChange);
 
   var setDefaultValues = function () {
     title.minLength = MIN_LENGTH;
@@ -113,7 +109,6 @@
     window.main.restore();
     resetForm();
   };
-  reset.addEventListener('click', onResetClick);
 
   var closeSuccess = function () {
     success.classList.add('hidden');
@@ -156,7 +151,7 @@
     window.showPopup(response);
   };
 
-  var onSubmitBtnClick = function (evt) {
+  var onSubmitButtonClick = function (evt) {
     evt.preventDefault();
     if (form.checkValidity()) {
       window.backend.upload(new FormData(form), successHandler, errorHandler);
@@ -165,6 +160,27 @@
     }
   };
 
-  submitBtn.addEventListener('click', onSubmitBtnClick);
+  var addListeners = function () {
+    resetButton.addEventListener('click', onResetClick);
+    submitButton.addEventListener('click', onSubmitButtonClick);
+    roomFieldset.addEventListener('change', onRoomFieldsetChange);
+    selectTimeOut.addEventListener('change', onOptionTimeOutChange);
+    selectTimeIn.addEventListener('change', onOptionTimeInChange);
+    selectType.addEventListener('change', onSelectTypeChange);
+  };
+
+  var removeListeners = function () {
+    submitButton.removeEventListener('click', onSubmitButtonClick);
+    resetButton.removeEventListener('click', onResetClick);
+    roomFieldset.removeEventListener('change', onRoomFieldsetChange);
+    selectTimeOut.removeEventListener('change', onOptionTimeOutChange);
+    selectTimeIn.removeEventListener('change', onOptionTimeInChange);
+    selectType.removeEventListener('change', onSelectTypeChange);
+  };
+
+  window.form = {
+    addListeners: addListeners,
+    removeListeners: removeListeners
+  };
 
 })();

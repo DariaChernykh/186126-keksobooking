@@ -6,8 +6,9 @@
   var cardTemplate = document.querySelector('template');
   var pinMain = document.querySelector('.map__pin--main');
   var form = document.querySelector('.ad-form');
-  var address = document.getElementById('address');
+  var address = document.querySelector('#address');
   var filter = document.querySelector('.map__filters');
+
   var PIN_MAIN_SIZE = 62;
   var PIN_MAIN_HALF_SIZE = PIN_MAIN_SIZE / 2;
   var ESC_CODE = 27;

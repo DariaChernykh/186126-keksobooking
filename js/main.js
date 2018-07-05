@@ -16,22 +16,22 @@
   var MAX_TOP = 630;
 
   var adverts = [];
+  var mainPinStart = {
+    left: pinMain.offsetLeft,
+    top: pinMain.offsetTop
+  };
 
   var successHandler = function (array) {
     adverts = array;
-    window.map.activate();
+    window.map.activate(onFormChange);
     window.cards.create(adverts.slice(0, MAX_PINS_QUANTITY));
-    window.controlPins.render(adverts.slice(0, MAX_PINS_QUANTITY));
+    window.pins.render(adverts.slice(0, MAX_PINS_QUANTITY));
   };
 
   var errorHandler = function (response) {
     window.showPopup(response);
   };
 
-  var mainPinStart = {
-    left: pinMain.offsetLeft,
-    top: pinMain.offsetTop
-  };
 
   var loadData = function () {
     address.value = (mainPinStart.left + PIN_MAIN_HALF_SIZE) + ', '
@@ -97,17 +97,15 @@
     pinMain.style.top = mainPinStart.top + 'px';
 
     filter.reset();
-    window.map.deactivate();
+    window.map.deactivate(onFormChange);
   };
 
   var onFormChange = function () {
-    window.controlCard.close();
-    window.controlPins.remove();
+    window.cards.close();
+    window.pins.remove();
     window.cards.create(window.filter.filteredArray(adverts));
-    window.controlPins.render(window.filter.filteredArray(adverts));
+    window.pins.render(window.filter.filteredArray(adverts));
   };
-
-  filter.addEventListener('change', window.debounce(onFormChange));
 
   window.main = {
     restore: restoreConditions,

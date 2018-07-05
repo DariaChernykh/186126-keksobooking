@@ -3,9 +3,12 @@
 (function () {
 
   var cardTemplate = window.variables.cardTemplate;
+  var map = window.variables.map;
+  var ESC_CODE = window.variables.ESC_CODE;
 
   var mapCard = cardTemplate.content.querySelector('.map__card');
 
+  var ENTER_CODE = 13;
   var IMAGE_WIDTH = 45;
   var IMAGE_HEIGHT = 40;
   var TRANSLATE_TYPE = {
@@ -21,7 +24,7 @@
     if (cards.length > 0) {
       cards = [];
     }
-    array.forEach(function (advert) {
+    cards = array.map(function (advert) {
       var card = mapCard.cloneNode(true);
       card.querySelector('.popup__title').textContent
         = advert.offer.title;
@@ -42,8 +45,9 @@
 
       addFeatures(advert.offer.features, card);
       addPhotos(advert.offer.photos, card);
-      cards.push(card);
+      return card;
     });
+    return cards;
   };
 
   var addFeatures = function (sortedFeatures, parent) {
@@ -77,9 +81,39 @@
     return cards[index];
   };
 
+  var closeCard = function () {
+    var close = map.querySelector('.popup__close');
+    if (!close) {
+      return;
+    }
+    close.parentElement.remove();
+    close.removeEventListener('click', onCloseClick);
+    document.removeEventListener('keydown', onCloseClick);
+  };
+
+  var onCloseClick = function () {
+    closeCard();
+  };
+
+  var onCloseKeydown = function (evt) {
+    if (evt.keyCode === ESC_CODE || evt.keyCode === ENTER_CODE) {
+      closeCard();
+    }
+  };
+
+  var initCard = function () {
+    var close = map.querySelector('.popup__close');
+    close.focus();
+
+    close.addEventListener('click', onCloseClick);
+    document.addEventListener('keydown', onCloseKeydown);
+  };
+
   window.cards = {
     create: createCards,
     get: getCardByIndex,
+    close: closeCard,
+    init: initCard
   };
 
 })();
