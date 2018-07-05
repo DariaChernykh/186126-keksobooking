@@ -110,7 +110,7 @@
   };
 
   var onResetClick = function () {
-    window.map.deactivate();
+    window.main.restore();
     resetForm();
   };
   reset.addEventListener('click', onResetClick);
@@ -144,7 +144,7 @@
   };
 
   var successHandler = function () {
-    window.map.deactivate();
+    window.main.restore();
     resetForm();
     success.classList.remove('hidden');
 

@@ -3,6 +3,7 @@
 (function () {
 
   var cardTemplate = window.variables.cardTemplate;
+
   var mapCard = cardTemplate.content.querySelector('.map__card');
 
   var IMAGE_WIDTH = 45;
@@ -17,7 +18,9 @@
   var cards = [];
 
   var createCards = function (array) {
-
+    if (cards.length > 0) {
+      cards = [];
+    }
     array.forEach(function (advert) {
       var card = mapCard.cloneNode(true);
       card.querySelector('.popup__title').textContent
@@ -39,7 +42,6 @@
 
       addFeatures(advert.offer.features, card);
       addPhotos(advert.offer.photos, card);
-
       cards.push(card);
     });
   };
@@ -70,13 +72,14 @@
       }
     });
   };
+
   var getCardByIndex = function (index) {
     return cards[index];
   };
 
   window.cards = {
     create: createCards,
-    get: getCardByIndex
+    get: getCardByIndex,
   };
 
 })();

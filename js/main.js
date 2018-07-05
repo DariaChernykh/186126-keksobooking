@@ -7,35 +7,38 @@
   var map = window.variables.map;
   var PIN_MAIN_SIZE = window.variables.PIN_MAIN_SIZE;
   var PIN_MAIN_HALF_SIZE = window.variables.PIN_MAIN_HALF_SIZE;
+  var filter = window.variables.filter;
+  var MAX_PINS_QUANTITY = window.variables.MAX_PINS_QUANTITY;
 
   var PIN_MAIN_ARROW = 22;
   var PIN_MAIN_ALL = PIN_MAIN_SIZE + PIN_MAIN_ARROW;
   var MIN_TOP = 130;
   var MAX_TOP = 630;
 
+  var adverts = [];
 
   var successHandler = function (array) {
+    adverts = array;
     window.map.activate();
-    window.cards.create(array);
-    window.controlPins.render(array);
-
+    window.cards.create(adverts.slice(0, MAX_PINS_QUANTITY));
+    window.controlPins.render(adverts.slice(0, MAX_PINS_QUANTITY));
   };
 
   var errorHandler = function (response) {
     window.showPopup(response);
   };
 
+  var mainPinStart = {
+    left: pinMain.offsetLeft,
+    top: pinMain.offsetTop
+  };
 
-  var onPinMainClick = function () {
-    pinMain.style.left = pinMain.offsetLeft + 'px';
-    pinMain.style.top = pinMain.offsetTop + 'px';
-    address.value = (pinMain.offsetLeft + PIN_MAIN_HALF_SIZE) + ', '
-      + (pinMain.offsetTop + PIN_MAIN_ALL);
+  var loadData = function () {
+    address.value = (mainPinStart.left + PIN_MAIN_HALF_SIZE) + ', '
+      + (mainPinStart.top + PIN_MAIN_ALL);
 
     window.backend.load(successHandler, errorHandler);
-    document.removeEventListener('mousedown', onPinMainClick);
   };
-  pinMain.addEventListener('mousedown', onPinMainClick);
 
   var onPinMainMouseDown = function (evt) {
     evt.preventDefault();
@@ -76,6 +79,9 @@
 
     var onPinMainMouseUp = function (upEvt) {
       upEvt.preventDefault();
+      if (!window.map.isMapActive()) {
+        loadData();
+      }
 
       document.removeEventListener('mousemove', onPinMainMouseMove);
       document.removeEventListener('mouseup', onPinMainMouseUp);
@@ -85,5 +91,26 @@
     document.addEventListener('mouseup', onPinMainMouseUp);
   };
   pinMain.addEventListener('mousedown', onPinMainMouseDown);
+
+  var restoreConditions = function () {
+    pinMain.style.left = mainPinStart.left + 'px';
+    pinMain.style.top = mainPinStart.top + 'px';
+
+    filter.reset();
+    window.map.deactivate();
+  };
+
+  var onFormChange = function () {
+    window.controlCard.close();
+    window.controlPins.remove();
+    window.cards.create(window.filter.filteredArray(adverts));
+    window.controlPins.render(window.filter.filteredArray(adverts));
+  };
+
+  filter.addEventListener('change', window.debounce(onFormChange));
+
+  window.main = {
+    restore: restoreConditions,
+  };
 
 })();
