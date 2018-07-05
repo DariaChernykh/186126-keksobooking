@@ -33,7 +33,7 @@
     top: pinMain.offsetTop
   };
 
-  var initMainPin = function () {
+  var loadData = function () {
     address.value = (mainPinStart.left + PIN_MAIN_HALF_SIZE) + ', '
       + (mainPinStart.top + PIN_MAIN_ALL);
 
@@ -80,7 +80,7 @@
     var onPinMainMouseUp = function (upEvt) {
       upEvt.preventDefault();
       if (!window.map.isMapActive()) {
-        initMainPin();
+        loadData();
       }
 
       document.removeEventListener('mousemove', onPinMainMouseMove);
@@ -92,9 +92,12 @@
   };
   pinMain.addEventListener('mousedown', onPinMainMouseDown);
 
-  var resetMainPin = function () {
+  var restoreConditions = function () {
     pinMain.style.left = mainPinStart.left + 'px';
     pinMain.style.top = mainPinStart.top + 'px';
+
+    filter.reset();
+    window.map.deactivate();
   };
 
   var onFormChange = function () {
@@ -106,8 +109,8 @@
 
   filter.addEventListener('change', window.debounce(onFormChange));
 
-  window.mainPin = {
-    reset: resetMainPin,
+  window.main = {
+    restore: restoreConditions,
   };
 
 })();
