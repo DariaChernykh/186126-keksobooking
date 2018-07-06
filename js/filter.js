@@ -45,22 +45,24 @@
       advert.offer.guests === Number(housingGuests.value);
   };
 
-  var checkFeature = function (advert) {
-    var response = true;
-    housingFeatures.forEach(function (feature) {
-      if (feature.checked &&
-        advert.offer.features.indexOf(feature.value) < 0) {
-        response = false;
+  var checkFeature = function (feature) {
+    var checkedFeatures = [];
+
+    housingFeatures.forEach(function (housingFeature) {
+      if (housingFeature.checked) {
+        checkedFeatures.push(housingFeature.value);
       }
     });
-    return response;
+    return checkedFeatures.every(function (checkedFeaturesListsItem) {
+      return feature.indexOf(checkedFeaturesListsItem) >= 0;
+    });
   };
 
   var getFilteredAdverts = function (adverts) {
     var copyAdverts = adverts.slice();
     var filteredAdverts = copyAdverts.filter(function (advert) {
       return checkType(advert) && checkPrice(advert) &&
-        checkRoom(advert) && checkGuests(advert) && checkFeature(advert);
+        checkRoom(advert) && checkGuests(advert) && checkFeature(advert.offer.features);
     }).slice(0, MAX_PINS_QUANTITY);
     return filteredAdverts;
   };
