@@ -43,7 +43,7 @@
 
   var toggleSimpleFields = function (parsedAdverts, card) {
     parsedAdverts.forEach(function (parsedAdvert) {
-      var cloneElement = card.querySelector(parsedAdvert.class);
+      var cloneElement = card.querySelector(parsedAdvert.name);
       if (parsedAdvert.isValid) {
         cloneElement.textContent = parsedAdvert.data;
       } else {
