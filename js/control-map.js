@@ -21,8 +21,8 @@
     isActive = false;
     map.classList.add('map--faded');
     form.classList.add('ad-form--disabled');
-    window.pins.remove();
-    window.cards.close();
+    window.pin.remove();
+    window.card.close();
 
     filter.removeEventListener('change', window.debounce);
     window.form.removeListeners();

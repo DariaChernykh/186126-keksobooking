@@ -20,10 +20,10 @@
     pinMain: pinMain,
     form: form,
     address: address,
+    filter: filter,
     PIN_MAIN_SIZE: PIN_MAIN_SIZE,
     PIN_MAIN_HALF_SIZE: PIN_MAIN_HALF_SIZE,
     ESC_CODE: ESC_CODE,
-    filter: filter,
     MAX_PINS_QUANTITY: MAX_PINS_QUANTITY
   };
 

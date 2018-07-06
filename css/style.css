@@ -368,6 +368,7 @@ fieldset {
 
 .map--faded .map__filters {
   opacity: 0;
+  display: none;
 }
 
 .map__filter {

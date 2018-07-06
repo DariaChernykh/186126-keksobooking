@@ -24,14 +24,13 @@
   var successHandler = function (array) {
     adverts = array;
     window.map.activate(onFormChange);
-    window.cards.create(adverts.slice(0, MAX_PINS_QUANTITY));
-    window.pins.render(adverts.slice(0, MAX_PINS_QUANTITY));
+    window.card.create(adverts.slice(0, MAX_PINS_QUANTITY));
+    window.pin.render(adverts.slice(0, MAX_PINS_QUANTITY));
   };
 
   var errorHandler = function (response) {
     window.showPopup(response);
   };
-
 
   var loadData = function () {
     address.value = (mainPinStart.left + PIN_MAIN_HALF_SIZE) + ', '
@@ -101,10 +100,11 @@
   };
 
   var onFormChange = function () {
-    window.cards.close();
-    window.pins.remove();
-    window.cards.create(window.filter.filteredArray(adverts));
-    window.pins.render(window.filter.filteredArray(adverts));
+    var getFilteredAdverts = window.filter.filteredAdverts(adverts);
+    window.card.close();
+    window.pin.remove();
+    window.card.create(getFilteredAdverts);
+    window.pin.render(getFilteredAdverts);
   };
 
   window.main = {

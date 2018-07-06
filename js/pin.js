@@ -13,8 +13,8 @@
 
   var pins = [];
 
-  var createPins = function (array) {
-    pins = array.map(function (advert) {
+  var createPins = function (adverts) {
+    pins = adverts.map(function (advert) {
       var pin = mapPin.cloneNode(true);
       pin.querySelector('img').src = advert.author.avatar;
       pin.style.left
@@ -33,8 +33,8 @@
       popup.remove();
     }
 
-    map.insertBefore(window.cards.get(index), mapFiltersContainer);
-    window.cards.init();
+    map.insertBefore(window.card.get(index), mapFiltersContainer);
+    window.card.init();
   };
 
   var renderPins = function (array) {
@@ -46,12 +46,13 @@
   };
 
   var removePins = function () {
-    pins.forEach(function (pin) {
+    pins.forEach(function (pin, index) {
+      pin.removeEventListener('click', onPinClick.bind(null, index));
       map.removeChild(pin);
     });
   };
 
-  window.pins = {
+  window.pin = {
     render: renderPins,
     remove: removePins,
   };

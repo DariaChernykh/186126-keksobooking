@@ -11,7 +11,7 @@
   var housingGuests = filter.querySelector('#housing-guests');
   var housingFeatures = Array.from(filter.querySelectorAll('.map__checkbox'));
 
-  var PRICE_RANGES = {
+  var priceRange = {
     LOW: 10000,
     MIDDLE: 50000
   };
@@ -24,12 +24,12 @@
   var checkPrice = function (advert) {
     switch (housingPrice.value) {
       case 'low':
-        return advert.offer.price < PRICE_RANGES.LOW;
+        return advert.offer.price < priceRange.LOW;
       case 'middle':
-        return advert.offer.price >= PRICE_RANGES.LOW &&
-          advert.offer.price <= PRICE_RANGES.MIDDLE;
+        return advert.offer.price >= priceRange.LOW &&
+          advert.offer.price <= priceRange.MIDDLE;
       case 'high':
-        return advert.offer.price > PRICE_RANGES.MIDDLE;
+        return advert.offer.price > priceRange.MIDDLE;
       default:
         return true;
     }
@@ -58,15 +58,15 @@
 
   var getFilteredAdverts = function (adverts) {
     var copyAdverts = adverts.slice();
-    var filteredArray = copyAdverts.filter(function (advert) {
+    var filteredAdverts = copyAdverts.filter(function (advert) {
       return checkType(advert) && checkPrice(advert) &&
         checkRoom(advert) && checkGuests(advert) && checkFeature(advert);
     }).slice(0, MAX_PINS_QUANTITY);
-    return filteredArray;
+    return filteredAdverts;
   };
 
   window.filter = {
-    filteredArray: getFilteredAdverts
+    filteredAdverts: getFilteredAdverts
   };
 
 })();

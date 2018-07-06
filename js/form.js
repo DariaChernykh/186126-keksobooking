@@ -36,9 +36,6 @@
     '100': ['0']
   };
 
-  address.placeholder = (pinMainLeft + PIN_MAIN_HALF_SIZE) + ', '
-    + (pinMainTop + PIN_MAIN_HALF_SIZE);
-
   var setPriceValues = function () {
     priceOptions.forEach(function (option, index) {
       if (option.selected) {
@@ -79,6 +76,9 @@
   };
 
   var setDefaultValues = function () {
+    address.placeholder = (pinMainLeft + PIN_MAIN_HALF_SIZE) + ', '
+      + (pinMainTop + PIN_MAIN_HALF_SIZE);
+
     title.minLength = MIN_LENGTH;
     title.maxLength = MAX_LENGTH;
     title.required = true;
