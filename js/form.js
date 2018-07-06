@@ -102,6 +102,7 @@
         input.classList.remove('invalid');
       });
     }
+    removeListeners();
     form.reset();
   };
 
@@ -138,7 +139,7 @@
     });
   };
 
-  var successHandler = function () {
+  var onSuccess = function () {
     window.main.restore();
     resetForm();
     success.classList.remove('hidden');
@@ -147,14 +148,14 @@
     document.addEventListener('keydown', onSuccessKeydown);
   };
 
-  var errorHandler = function (response) {
+  var onError = function (response) {
     window.showPopup(response);
   };
 
   var onSubmitButtonClick = function (evt) {
     evt.preventDefault();
     if (form.checkValidity()) {
-      window.backend.upload(new FormData(form), successHandler, errorHandler);
+      window.backend.upload(new FormData(form), onSuccess, onError);
     } else {
       checkForm();
     }
@@ -180,7 +181,6 @@
 
   window.form = {
     addListeners: addListeners,
-    removeListeners: removeListeners
   };
 
 })();

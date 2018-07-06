@@ -21,14 +21,14 @@
     top: pinMain.offsetTop
   };
 
-  var successHandler = function (array) {
+  var onSuccess = function (array) {
     adverts = array;
     window.map.activate(onFormChange);
     window.card.create(adverts.slice(0, MAX_PINS_QUANTITY));
     window.pin.render(adverts.slice(0, MAX_PINS_QUANTITY));
   };
 
-  var errorHandler = function (response) {
+  var onError = function (response) {
     window.showPopup(response);
   };
 
@@ -36,7 +36,7 @@
     address.value = (mainPinStart.left + PIN_MAIN_HALF_SIZE) + ', '
       + (mainPinStart.top + PIN_MAIN_ALL);
 
-    window.backend.load(successHandler, errorHandler);
+    window.backend.load(onSuccess, onError);
   };
 
   var onPinMainMouseDown = function (evt) {

@@ -25,7 +25,6 @@
     window.card.close();
 
     filter.removeEventListener('change', window.debounce);
-    window.form.removeListeners();
   };
 
   var isMapActive = function () {
