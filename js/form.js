@@ -91,11 +91,14 @@
     address.readOnly = true;
 
     setPriceValues();
+    setRoomValues();
   };
 
   setDefaultValues();
 
   var resetForm = function () {
+    form.reset();
+
     var invalidInputs = form.querySelectorAll('.invalid');
     if (invalidInputs) {
       invalidInputs.forEach(function (input) {
@@ -103,7 +106,7 @@
       });
     }
     removeListeners();
-    form.reset();
+    setDefaultValues();
   };
 
   var onResetClick = function () {
