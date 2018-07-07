@@ -3,11 +3,11 @@
 (function () {
 
   var map = document.querySelector('.map');
+  var pinMain = map.querySelector('.map__pin--main');
+  var filter = map.querySelector('.map__filters');
   var cardTemplate = document.querySelector('template');
-  var pinMain = document.querySelector('.map__pin--main');
   var form = document.querySelector('.ad-form');
-  var address = document.querySelector('#address');
-  var filter = document.querySelector('.map__filters');
+  var address = form.querySelector('#address');
 
   var PIN_MAIN_SIZE = 62;
   var PIN_MAIN_HALF_SIZE = PIN_MAIN_SIZE / 2;

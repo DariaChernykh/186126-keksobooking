@@ -4,6 +4,7 @@
 
   var URL = 'https://js.dump.academy/keksobooking/data';
   var UPLOAD_URL = 'https://js.dump.academy/keksobooking';
+  var STATUS_CODE = 200;
 
   var load = function (onLoad, onError) {
     var xhr = new XMLHttpRequest();
@@ -11,7 +12,7 @@
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
-      if (xhr.status === 200) {
+      if (xhr.status === STATUS_CODE) {
         onLoad(xhr.response);
       } else {
         onError('Cтатус ответа: : ' + xhr.status + ' ' + xhr.statusText);

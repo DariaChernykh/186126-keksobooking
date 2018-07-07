@@ -152,8 +152,7 @@
     window.showPopup(response);
   };
 
-  var onSubmitButtonClick = function (evt) {
-    evt.preventDefault();
+  var onSubmitButtonClick = function () {
     if (form.checkValidity()) {
       window.backend.upload(new FormData(form), onSuccess, onError);
     } else {
