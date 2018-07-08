@@ -819,6 +819,9 @@ fieldset {
 }
 
 .ad-form__photo {
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
   margin-right: 10px;
   margin-bottom: 10px;
 
