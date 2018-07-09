@@ -221,7 +221,8 @@
     var imageToDelete = previewAvatar.querySelector('img');
     imageToDelete.src = DEFAULT_URL;
 
-    var currentPhotos = Array.from(container.querySelectorAll('.ad-form__photo'));
+    var currentPhotos = Array.from(container.
+      querySelectorAll('.ad-form__photo'));
     currentPhotos.forEach(function (photo) {
       if (currentPhotos[currentPhotos.length - 1] !== photo) {
         photo.remove();

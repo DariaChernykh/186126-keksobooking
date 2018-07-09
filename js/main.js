@@ -100,7 +100,7 @@
   };
 
   var onFormChange = function () {
-    var getFilteredAdverts = window.filter.filteredAdverts(adverts);
+    var getFilteredAdverts = window.filter.getAdverts(adverts);
     window.card.close();
     window.pin.remove();
     window.card.create(getFilteredAdverts);

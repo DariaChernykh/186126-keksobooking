@@ -61,7 +61,7 @@
   };
 
   window.filter = {
-    filteredAdverts: getFilteredAdverts
+    getAdverts: getFilteredAdverts
   };
 
 })();
