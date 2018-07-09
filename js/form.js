@@ -215,7 +215,8 @@
       addImage(testFile, patternPhoto);
       container.appendChild(clonedPreview);
     });
-    previewPhoto.remove();
+
+    container.removeChild(container.querySelector('.ad-form__photo'));
   };
 
   var removePhoto = function () {
