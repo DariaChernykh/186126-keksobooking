@@ -31,6 +31,9 @@
   var pinMainLeft = Number(pinMain.style.left.substr(0, 3));
 
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+  var DEFAULT_URL = 'img/muffin-grey.svg';
+  var PHOTO_WIDTH = '40px';
+  var PHOTO_HEIGHT = '44px';
   var MAX_PRICE = 1000000;
   var MIN_LENGTH = 30;
   var MAX_LENGTH = 100;
@@ -104,9 +107,6 @@
 
   var resetForm = function () {
     form.reset();
-
-    var imageToDelete = previewAvatar.querySelector('img');
-    imageToDelete.src = 'img/muffin-grey.svg';
 
     var invalidInputs = form.querySelectorAll('.invalid');
     if (invalidInputs) {
@@ -194,38 +194,37 @@
   var onFileChooserAvatarChange = function () {
     var file = fileChooserAvatar.files[0];
     var patternPhoto = previewAvatar.querySelector('img');
+
     addImage(file, patternPhoto);
   };
 
   var createPhoto = function () {
     var createdPhoto = document.createElement('img');
-    createdPhoto.style.width = '40px';
-    createdPhoto.style.height = '44px';
-    previewPhoto.appendChild(createdPhoto);
+    createdPhoto.style.width = PHOTO_WIDTH;
+    createdPhoto.style.height = PHOTO_HEIGHT;
+    return createdPhoto;
   };
-
-  createPhoto();
 
   var onFileChooserPhoto = function () {
     var photos = Array.from(fileChooserPhoto.files);
-    photos.forEach(function (testFile) {
+    photos.forEach(function (photo) {
       var clonedPreview = previewPhoto.cloneNode(true);
-      var patternPhoto = clonedPreview.querySelector('img');
+      var patternPhoto = createPhoto();
+      clonedPreview.appendChild(patternPhoto);
 
-      addImage(testFile, patternPhoto);
-      container.appendChild(clonedPreview);
+      addImage(photo, patternPhoto);
+      container.insertBefore(clonedPreview, previewPhoto);
     });
-
-    container.removeChild(container.querySelector('.ad-form__photo'));
   };
 
   var removePhoto = function () {
+    var imageToDelete = previewAvatar.querySelector('img');
+    imageToDelete.src = DEFAULT_URL;
+
     var currentPhotos = Array.from(container.querySelectorAll('.ad-form__photo'));
     currentPhotos.forEach(function (photo) {
-      if (currentPhotos[0] !== photo) {
+      if (currentPhotos[currentPhotos.length - 1] !== photo) {
         photo.remove();
-      } else {
-        photo.innerHTML = '';
       }
     });
   };
