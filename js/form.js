@@ -11,6 +11,11 @@
   var submitButton = form.querySelector('.ad-form__submit');
   var resetButton = form.querySelector('.ad-form__reset');
   var success = document.querySelector('.success');
+  var fileChooserAvatar = document.querySelector('.ad-form-header__input');
+  var previewAvatar = document.querySelector('.ad-form-header__preview');
+  var container = document.querySelector('.ad-form__photo-container');
+  var previewPhoto = container.querySelector('.ad-form__photo');
+  var fileChooserPhoto = container.querySelector('.ad-form__input');
 
   var title = form.elements.title;
   var price = form.elements.price;
@@ -25,6 +30,7 @@
   var pinMainTop = Number(pinMain.style.top.substr(0, 3));
   var pinMainLeft = Number(pinMain.style.left.substr(0, 3));
 
+  var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
   var MAX_PRICE = 1000000;
   var MIN_LENGTH = 30;
   var MAX_LENGTH = 100;
@@ -99,12 +105,16 @@
   var resetForm = function () {
     form.reset();
 
+    var imageToDelete = previewAvatar.querySelector('img');
+    imageToDelete.src = 'img/muffin-grey.svg';
+
     var invalidInputs = form.querySelectorAll('.invalid');
     if (invalidInputs) {
       invalidInputs.forEach(function (input) {
         input.classList.remove('invalid');
       });
     }
+    removePhoto();
     removeListeners();
     setDefaultValues();
   };
@@ -163,33 +173,6 @@
     }
   };
 
-  var addListeners = function () {
-    resetButton.addEventListener('click', onResetClick);
-    submitButton.addEventListener('click', onSubmitButtonClick);
-    roomFieldset.addEventListener('change', onRoomFieldsetChange);
-    selectTimeOut.addEventListener('change', onOptionTimeOutChange);
-    selectTimeIn.addEventListener('change', onOptionTimeInChange);
-    selectType.addEventListener('change', onSelectTypeChange);
-  };
-
-  var removeListeners = function () {
-    submitButton.removeEventListener('click', onSubmitButtonClick);
-    resetButton.removeEventListener('click', onResetClick);
-    roomFieldset.removeEventListener('change', onRoomFieldsetChange);
-    selectTimeOut.removeEventListener('change', onOptionTimeOutChange);
-    selectTimeIn.removeEventListener('change', onOptionTimeInChange);
-    selectType.removeEventListener('change', onSelectTypeChange);
-  };
-
-  window.form = {
-    addListeners: addListeners,
-  };
-
-  var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
-
-  var fileChooserAvatar = document.querySelector('.ad-form-header__input');
-  var preview = document.querySelector('.ad-form-header__preview');
-
   var checkFile = function (file) {
     var fileName = file.name.toLowerCase();
     var matches = FILE_TYPES.some(function (it) {
@@ -197,6 +180,7 @@
     });
     return matches;
   };
+
   var addImage = function (url, image) {
     if (checkFile(url)) {
       var reader = new FileReader();
@@ -207,21 +191,22 @@
     }
   };
 
-  fileChooserAvatar.addEventListener('change', function () {
+  var onFileChooserAvatarChange = function () {
     var file = fileChooserAvatar.files[0];
-    var patternPhoto = preview.querySelector('img');
+    var patternPhoto = previewAvatar.querySelector('img');
     addImage(file, patternPhoto);
-  });
+  };
 
-  var container = document.querySelector('.ad-form__photo-container');
-  var previewPhoto = container.querySelector('.ad-form__photo');
-  var fileChooserPhoto = container.querySelector('.ad-form__input');
-  var testPhoto = document.createElement('img');
-  testPhoto.style.width = '40px';
-  testPhoto.style.height = '44px';
-  previewPhoto.appendChild(testPhoto);
+  var createPhoto = function () {
+    var createdPhoto = document.createElement('img');
+    createdPhoto.style.width = '40px';
+    createdPhoto.style.height = '44px';
+    previewPhoto.appendChild(createdPhoto);
+  };
 
-  fileChooserPhoto.addEventListener('change', function () {
+  createPhoto();
+
+  var onFileChooserPhoto = function () {
     var photos = Array.from(fileChooserPhoto.files);
     photos.forEach(function (testFile) {
       var clonedPreview = previewPhoto.cloneNode(true);
@@ -231,6 +216,43 @@
       container.appendChild(clonedPreview);
     });
     previewPhoto.remove();
-  });
+  };
+
+  var removePhoto = function () {
+    var currentPhotos = Array.from(container.querySelectorAll('.ad-form__photo'));
+    currentPhotos.forEach(function (photo) {
+      if (currentPhotos[0] !== photo) {
+        photo.remove();
+      } else {
+        photo.innerHTML = '';
+      }
+    });
+  };
+
+  var addListeners = function () {
+    resetButton.addEventListener('click', onResetClick);
+    submitButton.addEventListener('click', onSubmitButtonClick);
+    roomFieldset.addEventListener('change', onRoomFieldsetChange);
+    selectTimeOut.addEventListener('change', onOptionTimeOutChange);
+    selectTimeIn.addEventListener('change', onOptionTimeInChange);
+    selectType.addEventListener('change', onSelectTypeChange);
+    fileChooserAvatar.addEventListener('change', onFileChooserAvatarChange);
+    fileChooserPhoto.addEventListener('change', onFileChooserPhoto);
+  };
+
+  var removeListeners = function () {
+    submitButton.removeEventListener('click', onSubmitButtonClick);
+    resetButton.removeEventListener('click', onResetClick);
+    roomFieldset.removeEventListener('change', onRoomFieldsetChange);
+    selectTimeOut.removeEventListener('change', onOptionTimeOutChange);
+    selectTimeIn.removeEventListener('change', onOptionTimeInChange);
+    selectType.removeEventListener('change', onSelectTypeChange);
+    fileChooserAvatar.removeEventListener('change', onFileChooserAvatarChange);
+    fileChooserPhoto.removeEventListener('change', onFileChooserPhoto);
+  };
+
+  window.form = {
+    addListeners: addListeners,
+  };
 
 })();

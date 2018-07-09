@@ -567,8 +567,24 @@ fieldset {
     margin-left: 20px;
 }
 
-.ad-form-header__drop-zone {
+
+.ad-form-header__drop-zone:hover {
+  color: #ff5635;
+}
+
+.ad-form-header__input {
+  opacity: 0;
+  width: 150px;
   height: 70px;
+  z-index: 1;
+
+  cursor: pointer;
+}
+
+.ad-form-header__drop-zone {
+  width: 150px;
+  height: 70px;
+  position: absolute;
   padding: 10px 10px 5px;
 
   text-align: center;
@@ -577,16 +593,10 @@ fieldset {
 
   border: dashed 1px #c7c7c7;
   border-radius: 5px;
-
-  cursor: pointer;
 }
 
-.ad-form-header__drop-zone:hover {
-  color: #ff5635;
-}
-
-.ad-form-header__drop-zone:focus,
-.ad-form-header__input:focus + .form-header__drop-zone {
+.ad-form-header__input:focus,
+.ad-form-header__input:hover ~ .ad-form-header__drop-zone {
   color: #ff5635;
   -webkit-box-shadow: 0 0 2px 2px #ff6547;
           box-shadow: 0 0 2px 2px #ff6547;
@@ -786,7 +796,12 @@ fieldset {
 }
 
 .ad-form__upload .ad-form__input {
-  width: auto;
+  opacity: 0;
+  width: 150px;
+  height: 70px;
+  z-index: 1;
+
+  cursor: pointer;
 }
 
 .ad-form__upload:last-of-type {
@@ -794,7 +809,9 @@ fieldset {
 }
 
 .ad-form__drop-zone {
+  width: 150px;
   height: 70px;
+  position: absolute;
   padding: 10px 10px 5px;
 
   text-align: center;
@@ -803,8 +820,6 @@ fieldset {
 
   border: dashed 1px #c7c7c7;
   border-radius: 5px;
-
-  cursor: pointer;
 }
 
 .ad-form__drop-zone:hover {
@@ -812,7 +827,7 @@ fieldset {
 }
 
 .ad-form__drop-zone:focus,
-.ad-form__input:focus + .ad-form__drop-zone {
+.ad-form__input:hover ~ .ad-form__drop-zone {
   color: #ff5635;
   -webkit-box-shadow: 0 0 2px 2px #ff6547;
           box-shadow: 0 0 2px 2px #ff6547;
